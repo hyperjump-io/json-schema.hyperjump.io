@@ -1,0 +1,37 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "plugins": ["import"],
+  "rules": {
+    "array-bracket-spacing": ["error", "never"],
+    "arrow-parens": ["error", "always"],
+    "block-spacing": ["error", "always"],
+    "brace-style": ["error", "1tbs"],
+    "comma-dangle": ["error", "never"],
+    "import/no-unresolved": ["error", { "commonjs": true }],
+    "import/extensions": ["error", "always", { "js": "never", "mjs": "never" }],
+    "import/newline-after-import": ["error", { "count": 2 }],
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "no-trailing-spaces": "error",
+    "no-tabs": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "_.*" }],
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "double", { "allowTemplateLiterals": true }],
+    "semi": ["error", "always"]
+  },
+  "settings": {
+    "import/resolver": "node"
+  }
+}
