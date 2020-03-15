@@ -1,0 +1,8 @@
+{
+	"background_color": "#ffffff",
+	"theme_color": "#333333",
+	"name": "Hyperjump - JSON Schema Validator",
+	"short_name": "JSV",
+	"display": "minimal-ui",
+	"start_url": "/"
+}

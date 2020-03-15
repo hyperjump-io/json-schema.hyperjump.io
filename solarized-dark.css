@@ -1,0 +1,37 @@
+.solarized-dark {
+  --text-color: #839496;
+  --background-color: #002b36;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  caret-color: var(--text-color);
+  --line-focus-background-color: #073642;
+  --grouping-color: #dc322f;
+  --property-color: #b58900;
+  --string-color: #2aa198;
+  --number-color: #2aa198;
+  --boolean-color: #2aa198;
+  --null-color: #268bd2;
+}
+
+.solarized-dark::-webkit-scrollbar {
+  /* This is necessary to override default styling even though tho it's empty */
+}
+
+.solarized-dark {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-color) var(--background-color);
+}
+
+.solarized-dark::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+.solarized-dark::-webkit-scrollbar-thumb {
+  background-color: var(--text-color) ;
+  border-radius: 6px;
+  border: 3px solid var(--background-color);
+}
+
+.solarized-dark::-webkit-scrollbar-corner {
+  background: var(--background-color);
+}
