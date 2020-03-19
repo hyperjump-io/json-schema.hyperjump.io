@@ -10,7 +10,7 @@
   const theme = "solarized-dark";
 
   let schema = `{
-  "$schema": "https://json-schema.org/draft/2019-09/schema"
+  "$schema": "${defaultSchemaVersion}"
 }`;
 
   let instance = `{}`;
