@@ -12,7 +12,7 @@
   "repository": "github:jdesrosiers/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
-    "@hyperjump/json-schema": "^0.2.1",
+    "@hyperjump/json-schema": "^0.3.0",
     "moo": "^0.5.1",
     "morgan": "^1.9.1",
     "polka": "^0.5.0",
