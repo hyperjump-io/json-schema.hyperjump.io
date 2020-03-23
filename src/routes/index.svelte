@@ -10,8 +10,8 @@
   const theme = "solarized-dark";
 
   let schema = `{
-  "$schema": "${defaultSchemaVersion}",
-  "$id": "${schemaUrl}"
+  "$id": "${schemaUrl}",
+  "$schema": "${defaultSchemaVersion}"
 }`;
 
   let instance = `{}`;
