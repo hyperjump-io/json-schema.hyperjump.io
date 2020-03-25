@@ -34,9 +34,11 @@
     {/if}
   </div>
   {/each}
+  {#if newTab}
   <div class="tab" on:click={addTab}>
     <span class="label">+</span>
   </div>
+  {/if}
 </div>
 <Editor bind:value={tabs[selectedTab].text} />
 
@@ -49,24 +51,23 @@
     border-radius: .5em .5em 0 0;
   }
 
+  .tab:first-child {
+    font-weight: bold;
+  }
+
   .tab.active {
     border-bottom: thin solid var(--background-color);
   }
 
   .tab .label {
     display: inline-block;
-    padding: .5em;
+    padding: .25em .25em;
     cursor: pointer;
   }
 
   .tab .close {
     display: inline-block;
-    padding: .5em .5em .5em 0;
+    padding: .25em .25em .25em 0;
     cursor: pointer;
-  }
-
-  :global(.Editor) {
-    padding: .5em;
-    resize: none;
   }
 </style>

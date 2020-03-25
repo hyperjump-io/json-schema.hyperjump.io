@@ -5,47 +5,72 @@
   export let theme = "solarized-dark";
   export let value = "";
 
+  $: numberOfLines = (value.match(/\n/g) || []).length + 1;
+
   $: tokens = (function () {
     jsonLexer.reset(value);
     return Array.from(jsonLexer);
   }());
 </script>
 
-<div class="Editor {theme}">
-  <pre class="highlighted">
-    {#each tokens as token}
-      {#if token.type === "grouping"}
-        <span class="grouping">{token.value}</span>
-      {:else if token.type === "property"}
-        "<span class="property">{token.value.substring(1, token.value.length - 1)}</span>"
-      {:else if token.type === "string"}
-        "<span class="string">{token.value.substring(1, token.value.length - 1)}</span>"
-      {:else if token.type === "number"}
-        <span class="number">{token.value}</span>
-      {:else if token.type === "boolean"}
-        <span class="boolean">{token.value}</span>
-      {:else if token.type === "null"}
-        <span class="null">{token.value}</span>
-      {:else}
-        {token.value}
-      {/if}
+<div class="Editor">
+  <div class="line-numbers">
+    {#each [...Array(numberOfLines)] as _, lineNumber}
+    <div>{lineNumber + 1}</div>
     {/each}
-  </pre>
-  <textarea class="src" bind:value={value}></textarea>
+  </div>
+  <div class="editable {theme}">
+    <pre class="highlighted">
+      {#each tokens as token}
+        {#if token.type === "grouping"}
+          <span class="grouping">{token.value}</span>
+        {:else if token.type === "property"}
+          "<span class="property">{token.value.substring(1, token.value.length - 1)}</span>"
+        {:else if token.type === "string"}
+          "<span class="string">{token.value.substring(1, token.value.length - 1)}</span>"
+        {:else if token.type === "number"}
+          <span class="number">{token.value}</span>
+        {:else if token.type === "boolean"}
+          <span class="boolean">{token.value}</span>
+        {:else if token.type === "null"}
+          <span class="null">{token.value}</span>
+        {:else}
+          {token.value}
+        {/if}
+      {/each}
+    </pre>
+    <textarea class="src" bind:value={value}></textarea>
+  </div>
 </div>
 
 <style>
   .Editor {
+    display: flex;
+    box-sizing: border-box;
+    font-size: 11pt;
+
+    height: 100%;
+    border: var(--editor-border);
+  }
+
+  .line-numbers {
+    overflow: hidden;
+    text-align: right;
+    border-right: var(--editor-border);
+    padding: var(--editor-padding);
+  }
+
+  .editable {
     display: grid;
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
     overflow: scroll;
-    border: thin solid;
-    font-size: 11pt;
     resize: none;
+    padding: var(--editor-padding);
   }
 
-  .Editor > * {
+  .editable > * {
     font-size: inherit;
     white-space: pre;
     padding: 0;

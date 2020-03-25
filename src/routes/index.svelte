@@ -11,7 +11,7 @@
   const theme = "solarized-dark";
 
   const newTab = (function () {
-    let sequence = 0;
+    let sequence = 1;
 
     return (label = undefined, url = undefined) => {
       const id = url || `${schemaUrl}${++sequence}`;
@@ -22,8 +22,8 @@
     }
   }());
 
-  let schemas = [newTab("Main", schemaUrl)];
-  let instance = `{}`;
+  let schemas = [newTab("Schema", schemaUrl)];
+  let instances = [{ label: "Instance", text: `{}` }];
 
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
 
@@ -37,14 +37,14 @@
   }());
 
   $: validationResults = (async function () {
-    if (instance !== "") {
+    if (instances[0].text !== "") {
       let v;
       try {
         v = await validate;
       } catch (e) {}
 
       if (v) {
-        const output = v(JSON.parse(instance), JsonSchema.BASIC);
+        const output = v(JSON.parse(instances[0].text), JsonSchema.BASIC);
         if (output.valid) {
           return output;
         } else {
@@ -62,7 +62,6 @@
 <h1>JSON Schema Validator</h1>
 
 <main>
-  <h2>Schema</h2>
   <div class="schemas">
     <EditorTabs bind:tabs={schemas} newTab={newTab} />
   </div>
@@ -70,8 +69,9 @@
     <Results results={validate} />
   </div>
 
-  <h2>Instance</h2>
-  <Editor bind:value={instance} />
+  <div class="instances">
+    <EditorTabs bind:tabs={instances} />
+  </div>
   <div class="results {theme}">
     {#await validate then _}
       <Results results={validationResults} />
@@ -84,27 +84,30 @@
     margin: auto;
   }
 
-  h2 {
-    margin: 0;
-  }
-
   main {
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1.25em 1fr 200px;;
+    grid-template-rows: 1fr 200px;
     grid-gap: .5em;
     margin: .5em;
     height: 90%;
+
+    --editor-padding: .25em;
+    --editor-border: thin solid;
   }
 
   main :global(.Editor) {
     min-height: 200px;
-    padding: .25em;
-    resize: none;
   }
 
   .schemas {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .instances {
     display: flex;
     flex-direction: column;
     overflow: auto;
