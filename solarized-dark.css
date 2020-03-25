@@ -14,7 +14,7 @@
 }
 
 .solarized-dark::-webkit-scrollbar {
-  /* This is necessary to override default styling even though tho it's empty */
+  width: 1em;
 }
 
 .solarized-dark {
