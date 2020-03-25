@@ -25,6 +25,7 @@ export default moo.compile({
   property: new RegExp(property),
   string: new RegExp(string),
   grouping: ["{", "}", "[", "]"],
-  keyword: ["null", "true", "false"],
+  boolean: ["true", "false"],
+  null: ["null"],
   other: /./
 });

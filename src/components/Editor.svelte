@@ -22,8 +22,10 @@
         "<span class="string">{token.value.substring(1, token.value.length - 1)}</span>"
       {:else if token.type === "number"}
         <span class="number">{token.value}</span>
-      {:else if token.type === "literal"}
-        <span class="atom">{token.value}</span>
+      {:else if token.type === "boolean"}
+        <span class="boolean">{token.value}</span>
+      {:else if token.type === "null"}
+        <span class="null">{token.value}</span>
       {:else}
         {token.value}
       {/if}
@@ -82,7 +84,11 @@
     color: var(--number-color);
   }
 
-  .atom {
+  .boolean {
     color: var(--boolean-color);
+  }
+
+  .null {
+    color: var(--null-color);
   }
 </style>
