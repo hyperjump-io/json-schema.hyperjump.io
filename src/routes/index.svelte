@@ -1,6 +1,7 @@
 <script>
   import JsonSchema from "@hyperjump/json-schema";
   import Editor from "../components/Editor.svelte";
+  import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
 
 
@@ -9,22 +10,30 @@
 
   const theme = "solarized-dark";
 
-  let schema = `{
-  "$id": "${schemaUrl}",
-  "$schema": "${defaultSchemaVersion}"
-}`;
+  const newTab = (function () {
+    let sequence = 0;
 
+    return (label = undefined, url = undefined) => {
+      const id = url || `${schemaUrl}${++sequence}`;
+      return { label: label || `Schema ${sequence}`, text: `{
+  "$id": "${id}",
+  "$schema": "${defaultSchemaVersion}"
+}` };
+    }
+  }());
+
+  let schemas = [newTab("Main", schemaUrl)];
   let instance = `{}`;
 
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
 
   $: validate = (async function () {
-    if (schema !== "") {
-      JsonSchema.add(JSON.parse(schema), schemaUrl, defaultSchemaVersion);
+    schemas.forEach((schema) => {
+      JsonSchema.add(JSON.parse(schema.text || "true"), schemaUrl, defaultSchemaVersion);
+    });
 
-      const doc = await JsonSchema.get(schemaUrl);
-      return JsonSchema.validate(doc);
-    }
+    const doc = await JsonSchema.get(schemaUrl);
+    return JsonSchema.validate(doc);
   }());
 
   $: validationResults = (async function () {
@@ -54,7 +63,9 @@
 
 <main>
   <h2>Schema</h2>
-  <Editor bind:value={schema} />
+  <div class="schemas">
+    <EditorTabs bind:tabs={schemas} newTab={newTab} />
+  </div>
   <div class="results {theme}">
     <Results results={validate} />
   </div>
@@ -91,6 +102,12 @@
     min-height: 200px;
     padding: .25em;
     resize: none;
+  }
+
+  .schemas {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
   }
 
   .results {
