@@ -12,7 +12,7 @@
     <ul>
       {#each error.errors as outputUnit}
         {#if !outputUnit.valid}
-          <li><code>instance{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
+          <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
         {/if}
       {/each}
     </ul>

@@ -13,13 +13,13 @@
   }());
 </script>
 
-<div class="Editor">
+<div class="Editor {theme}">
   <div class="line-numbers">
     {#each [...Array(numberOfLines)] as _, lineNumber}
     <div>{lineNumber + 1}</div>
     {/each}
   </div>
-  <div class="editable {theme}">
+  <div class="editable">
     <pre class="highlighted">
       {#each tokens as token}
         {#if token.type === "grouping"}
@@ -48,16 +48,19 @@
     display: flex;
     box-sizing: border-box;
     font-size: 11pt;
-
+    overflow: scroll;
     height: 100%;
     border: var(--editor-border);
   }
 
   .line-numbers {
-    overflow: hidden;
+    padding: var(--editor-padding) 0;
+  }
+
+  .line-numbers > * {
     text-align: right;
+    padding: 0 var(--editor-padding);
     border-right: var(--editor-border);
-    padding: var(--editor-padding);
   }
 
   .editable {
@@ -65,7 +68,6 @@
     box-sizing: border-box;
     height: 100%;
     width: 100%;
-    overflow: scroll;
     resize: none;
     padding: var(--editor-padding);
   }
