@@ -1,9 +1,12 @@
 <script>
+  import { createEventDispatcher } from  "svelte";
   import Editor from "../components/Editor.svelte";
 
 
   export let tabs = [];
-  export let newTab;
+  export let newTab = undefined;
+
+  const dispatch = createEventDispatcher();
 
   let selectedTab = 0;
 
@@ -40,7 +43,7 @@
   </div>
   {/if}
 </div>
-<Editor bind:value={tabs[selectedTab].text} />
+<Editor bind:value={tabs[selectedTab].text} on:input={(event) => dispatch("input", tabs)} />
 
 <style>
   .tab {

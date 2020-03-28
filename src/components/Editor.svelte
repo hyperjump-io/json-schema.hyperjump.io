@@ -39,7 +39,7 @@
         {/if}
       {/each}
     </pre>
-    <textarea class="src" bind:value={value}></textarea>
+    <textarea class="src" bind:value={value} on:input></textarea>
   </div>
 </div>
 

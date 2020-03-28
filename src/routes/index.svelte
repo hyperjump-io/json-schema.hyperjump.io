@@ -5,6 +5,7 @@
   import Results from "../components/Results.svelte";
 
 
+  const DEBOUNCE_DELAY = 750;
   const defaultSchemaVersion = "https://json-schema.org/draft/2019-09/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
@@ -24,6 +25,16 @@
 
   let schemas = [newTab("Schema", schemaUrl)];
   let instances = [{ label: "Instance", text: `{}` }];
+
+  const debounce = function (fn, delay) {
+    let timer;
+    return ({ detail }) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(detail), delay);
+    };
+  };
+  const updateSchemas = debounce((detail) => schemas = detail, DEBOUNCE_DELAY);
+  const updateInstances = debounce((detail) => instances = detail, DEBOUNCE_DELAY);
 
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
 
@@ -63,14 +74,14 @@
 
 <main>
   <div class="schemas">
-    <EditorTabs bind:tabs={schemas} newTab={newTab} />
+    <EditorTabs tabs={schemas} newTab={newTab} on:input={updateSchemas} />
   </div>
   <div class="results {theme}">
     <Results results={validate} />
   </div>
 
   <div class="instances">
-    <EditorTabs bind:tabs={instances} />
+    <EditorTabs tabs={instances} on:input={updateInstances} />
   </div>
   <div class="results {theme}">
     {#await validate then _}
