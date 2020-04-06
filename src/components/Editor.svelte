@@ -46,7 +46,6 @@
 <style>
   .Editor {
     display: flex;
-    box-sizing: border-box;
     font-size: 11pt;
     overflow: scroll;
     height: 100%;
@@ -65,8 +64,6 @@
 
   .editable {
     display: grid;
-    box-sizing: border-box;
-    height: 100%;
     width: 100%;
     resize: none;
     padding: var(--editor-padding);

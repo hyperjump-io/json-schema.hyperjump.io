@@ -70,17 +70,17 @@
   <title>JSON Schema Validator</title>
 </svelte:head>
 
-<h1>JSON Schema Validator</h1>
-
 <main>
-  <div class="schemas">
+  <h1>JSON Schema Validator</h1>
+
+  <div class="editor-section">
     <EditorTabs tabs={schemas} newTab={newTab} on:input={updateSchemas} />
   </div>
   <div class="results {theme}">
     <Results results={validate} />
   </div>
 
-  <div class="instances">
+  <div class="editor-section">
     <EditorTabs tabs={instances} on:input={updateInstances} />
   </div>
   <div class="results {theme}">
@@ -93,35 +93,27 @@
 <style>
   h1 {
     margin: auto;
+    grid-column-end: span 2;
   }
 
   main {
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 200px;
+    grid-template-rows: auto 1fr 200px;
     grid-gap: .5em;
-    margin: .5em;
-    height: 90%;
+    padding: .5em;
+    height: 100%;
 
     --editor-padding: .25em;
     --editor-border: thin solid;
   }
 
-  main :global(.Editor) {
+  .editor-section {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
     min-height: 200px;
-  }
-
-  .schemas {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-  }
-
-  .instances {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
   }
 
   .results {
