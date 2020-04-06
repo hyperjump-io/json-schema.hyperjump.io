@@ -4,8 +4,8 @@
 
 {#await results}
   Validating ...
-{:then _}
-  Valid
+{:then results}
+  {results ? "Valid" : ""}
 {:catch error}
   {#if error.absoluteKeywordLocation}
     Invalid
