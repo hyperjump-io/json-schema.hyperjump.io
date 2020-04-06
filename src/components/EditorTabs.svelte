@@ -7,6 +7,7 @@
   export let newTab = undefined;
   export let active = 0;
   export let selected = 0;
+  export let minTabs = 1;
 
   const dispatch = createEventDispatcher();
 
@@ -32,7 +33,7 @@
   {#each tabs as tab, ndx}
   <div class="tab" class:selected={ndx === selected} class:active={ndx === active}>
     <span class="label" on:click={() => selectTab(ndx)}>{tab.label}</span>
-    {#if ndx !== 0}
+    {#if !tab.persistent && tabs.length > minTabs}
     <span class="close" on:click={() => removeTab(ndx)}>&times;</span>
     {/if}
   </div>

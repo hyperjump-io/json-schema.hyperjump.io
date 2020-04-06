@@ -14,22 +14,22 @@
   const newSchema = (function () {
     let sequence = 1;
 
-    return (label = undefined, url = undefined) => {
+    return (label = undefined, url = undefined, persistent = false) => {
       const id = url || `${schemaUrl}${++sequence}`;
       return { label: label || `Schema ${sequence}`, text: `{
   "$id": "${id}",
   "$schema": "${defaultSchemaVersion}"
-}` };
+}`, persistent: persistent };
     }
   }());
 
   const newInstance = (function () {
     let sequence = 1;
 
-    return (label = undefined) => ({ label: label || `Instance ${sequence++}`, text: "" });
+    return () => ({ label: `Instance ${sequence++}`, text: "" });
   }());
 
-  let schemas = [newSchema("Schema", schemaUrl)];
+  let schemas = [newSchema("Schema", schemaUrl, true)];
   let instances = [newInstance("Instance")];
   let selectedInstance = 0;
 
