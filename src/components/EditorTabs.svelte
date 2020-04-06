@@ -46,20 +46,31 @@
 <Editor bind:value={tabs[selectedTab].text} on:input={(event) => dispatch("input", tabs)} />
 
 <style>
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tabs::after {
+    content: "";
+    display: inline-block;
+    flex-grow: 1;
+    border-bottom: var(--editor-border);
+  }
+
   .tab {
     position: relative;
     display: inline-block;
-    border: thin solid;
-    bottom: -1px;
+    border: var(--editor-border);
     border-radius: .5em .5em 0 0;
+  }
+
+  .tab.active {
+    border-bottom: none;
   }
 
   .tab:first-child {
     font-weight: bold;
-  }
-
-  .tab.active {
-    border-bottom: thin solid var(--background-color);
   }
 
   .tab .label {

@@ -50,6 +50,7 @@
     overflow: scroll;
     height: 100%;
     border: var(--editor-border);
+    border-top: none;
   }
 
   .line-numbers {
