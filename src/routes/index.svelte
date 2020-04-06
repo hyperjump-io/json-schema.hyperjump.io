@@ -11,7 +11,7 @@
 
   const theme = "solarized-dark";
 
-  const newTab = (function () {
+  const newSchema = (function () {
     let sequence = 1;
 
     return (label = undefined, url = undefined) => {
@@ -23,8 +23,15 @@
     }
   }());
 
-  let schemas = [newTab("Schema", schemaUrl)];
-  let instances = [{ label: "Instance", text: `{}` }];
+  const newInstance = (function () {
+    let sequence = 1;
+
+    return (label = undefined) => ({ label: label || `Instance ${sequence++}`, text: "" });
+  }());
+
+  let schemas = [newSchema("Schema", schemaUrl)];
+  let instances = [newInstance("Instance")];
+  let selectedInstance = 0;
 
   const debounce = function (fn, delay) {
     let timer;
@@ -48,14 +55,14 @@
   }());
 
   $: validationResults = (async function () {
-    if (instances[0].text !== "") {
+    if (instances[selectedInstance].text !== "") {
       let v;
       try {
         v = await validate;
       } catch (e) {}
 
       if (v) {
-        const output = v(JSON.parse(instances[0].text), JsonSchema.BASIC);
+        const output = v(JSON.parse(instances[selectedInstance].text), JsonSchema.BASIC);
         if (output.valid) {
           return output;
         } else {
@@ -74,14 +81,14 @@
   <h1>JSON Schema Validator</h1>
 
   <div class="editor-section">
-    <EditorTabs tabs={schemas} newTab={newTab} on:input={updateSchemas} />
+    <EditorTabs tabs={schemas} newTab={newSchema} active={0} on:input={updateSchemas} />
   </div>
   <div class="results {theme}">
     <Results results={validate} />
   </div>
 
   <div class="editor-section">
-    <EditorTabs tabs={instances} on:input={updateInstances} />
+    <EditorTabs tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} on:input={updateInstances} />
   </div>
   <div class="results {theme}">
     {#await validate then _}

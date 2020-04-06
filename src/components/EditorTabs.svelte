@@ -5,23 +5,23 @@
 
   export let tabs = [];
   export let newTab = undefined;
+  export let active = 0;
+  export let selected = 0;
 
   const dispatch = createEventDispatcher();
 
-  let selectedTab = 0;
-
   function selectTab(id) {
-    selectedTab = id;
+    selected = id;
   }
 
   function addTab() {
     tabs[tabs.length] = newTab();
-    selectedTab = tabs.length - 1;
+    selected = tabs.length - 1;
   }
 
   function removeTab(id) {
-    if (selectedTab >= id && selectedTab > 0) {
-      selectedTab -= 1;
+    if (selected >= id && selected > 0) {
+      selected -= 1;
     }
     tabs.splice(id, 1);
     tabs = tabs;
@@ -30,7 +30,7 @@
 
 <div class="tabs">
   {#each tabs as tab, ndx}
-  <div class="tab" class:active={ndx === selectedTab}>
+  <div class="tab" class:selected={ndx === selected} class:active={ndx === active}>
     <span class="label" on:click={() => selectTab(ndx)}>{tab.label}</span>
     {#if ndx !== 0}
     <span class="close" on:click={() => removeTab(ndx)}>&times;</span>
@@ -43,7 +43,7 @@
   </div>
   {/if}
 </div>
-<Editor bind:value={tabs[selectedTab].text} on:input={(event) => dispatch("input", tabs)} />
+<Editor bind:value={tabs[selected].text} on:input={(event) => dispatch("input", tabs)} />
 
 <style>
   .tabs {
@@ -65,11 +65,11 @@
     border-radius: .5em .5em 0 0;
   }
 
-  .tab.active {
+  .tab.selected {
     border-bottom: none;
   }
 
-  .tab:first-child {
+  .tab.active {
     font-weight: bold;
   }
 
