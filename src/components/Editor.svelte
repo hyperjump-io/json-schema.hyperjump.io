@@ -48,7 +48,7 @@
     display: flex;
     font-size: 11pt;
     overflow: scroll;
-    height: 100%;
+    flex-grow: 1;
     border: var(--editor-border);
     border-top: none;
   }
