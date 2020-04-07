@@ -3,6 +3,7 @@
   import Editor from "../components/Editor.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
+  import Footer from "../components/Footer.svelte";
 
 
   const DEBOUNCE_DELAY = 750;
@@ -74,27 +75,29 @@
 </script>
 
 <svelte:head>
-  <title>JSON Schema Validator</title>
+  <title>Hyperjump - JSON Schema Validator</title>
 </svelte:head>
 
 <main>
-  <h1>JSON Schema Validator</h1>
+  <h1>Hyperjump - JSON Schema Validator</h1>
 
   <div class="editor-section">
     <EditorTabs tabs={schemas} newTab={newSchema} active={0} on:input={updateSchemas} />
   </div>
-  <div class="results {theme}">
-    <Results results={validate} />
-  </div>
-
   <div class="editor-section">
     <EditorTabs tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} on:input={updateInstances} />
+  </div>
+
+  <div class="results {theme}">
+    <Results results={validate} />
   </div>
   <div class="results {theme}">
     {#await validate then _}
       <Results results={validationResults} />
     {/await}
   </div>
+
+  <Footer />
 </main>
 
 <style>
@@ -105,9 +108,9 @@
 
   main {
     display: grid;
-    grid-auto-flow: column;
+    grid-auto-flow: row;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr 200px;
+    grid-template-rows: auto 1fr 200px auto;
     grid-gap: .5em;
     padding: .5em;
     height: 100%;
