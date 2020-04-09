@@ -39,7 +39,7 @@
         {/if}
       {/each}
     </pre>
-    <textarea class="src" bind:value={value} on:input></textarea>
+    <textarea class="src" aria-label="Code Editor" bind:value={value} on:input></textarea>
   </div>
 </div>
 
