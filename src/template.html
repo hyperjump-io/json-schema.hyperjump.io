@@ -22,6 +22,12 @@
          lazily loaded when it precaches secondary pages -->
     %sapper.styles%
 
+    <script>
+      // Force HTTPS
+      if (location.hostname !== "localhost" && location.protocol === "http:") {
+        location = `https://${location.host}${location.pathname}`;
+      }
+    </script>
     <!-- This contains the contents of the <svelte:head> component, if
          the current page has one -->
     %sapper.head%
