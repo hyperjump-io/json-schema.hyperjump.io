@@ -47,8 +47,9 @@
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
 
   $: validate = (async function () {
-    schemas.forEach((schema) => {
-      JsonSchema.add(JSON.parse(schema.text || "true"), schemaUrl, defaultSchemaVersion);
+    schemas.forEach((schema, ndx) => {
+      const externalId = ndx === 0 ? schemaUrl : "";
+      JsonSchema.add(JSON.parse(schema.text || "true"), externalId, defaultSchemaVersion);
     });
 
     const doc = await JsonSchema.get(schemaUrl);
