@@ -6,10 +6,9 @@ const digit19 = `[1-9]`;
 const hexdig = `[0-9a-fA-F]`;
 
 // String
-const unescaped = `[^\\"]`;
-const char = `(?:${unescaped}|\\(?:["/\\bfnrt]|u${hexdig}{4})`;
+const char = `(?:\\\\["\\/\\\\brfnt]|\\\\u${hexdig}{4}|[^"\\\\])`;
 const string = `"${char}*"`;
-const property = `"${char}*"(?=:)`;
+const property = `"${char}*"(?=\\s*:)`;
 
 // Number
 const int = `(?:0|${digit19}${digit}*)`;
