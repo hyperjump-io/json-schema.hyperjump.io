@@ -71,6 +71,7 @@
   }
 
   .editable > * {
+    font-family: monospace;
     font-size: inherit;
     white-space: pre;
     padding: 0;
