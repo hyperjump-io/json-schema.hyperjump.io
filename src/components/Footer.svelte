@@ -7,13 +7,13 @@
 <footer>
   <ul class="links">
     <li>
-      <GitHubLink href="https://github.com/jdesrosiers/json-schema.hyperjump.io">
-        jdesrosiers/json-schema.hyperjump.io
+      <GitHubLink href="https://github.com/hyperjump-io/json-schema.hyperjump.io">
+        hyperjump-io/json-schema.hyperjump.io
       </GitHubLink>
     </li>
     <li>
-      <GitHubLink href="https://github.com/jdesrosiers/json-schema">
-        jdesrosiers/json-schema
+      <GitHubLink href="https://github.com/hyperjump-io/json-schema-validator">
+        hyperjump-io/json-schema-validator
       </GitHubLink>
     </li>
     <li>

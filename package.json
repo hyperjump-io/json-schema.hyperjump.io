@@ -9,10 +9,10 @@
     "lint": "eslint --ignore-path .gitignore .",
     "start": "node __sapper__/build"
   },
-  "repository": "github:jdesrosiers/json-schema.hyperjump.io",
+  "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
-    "@hyperjump/json-schema": "^0.6.1",
+    "@hyperjump/json-schema": "^0.6.2",
     "moo": "^0.5.1",
     "morgan": "^1.9.1",
     "polka": "^0.5.0",
