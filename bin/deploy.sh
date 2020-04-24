@@ -20,7 +20,7 @@ npm run export
 
 cd "$WORK_DIR"
 
-git clone -b gh-pages --single-branch git@github.com:jdesrosiers/json-schema.hyperjump.io.git
+git clone -b gh-pages --single-branch git@github.com:hyperjump-io/json-schema.hyperjump.io.git
 cd json-schema.hyperjump.io
 
 git rm -r -q .
