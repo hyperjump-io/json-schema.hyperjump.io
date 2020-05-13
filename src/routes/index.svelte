@@ -4,6 +4,7 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+  import "../lib/draft-2020-XX";
 
 
   const DEBOUNCE_DELAY = 750;
