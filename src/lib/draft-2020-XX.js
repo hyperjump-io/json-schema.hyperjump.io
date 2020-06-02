@@ -11,11 +11,12 @@ import contentMetaSchema from "./meta/draft/2020-XX/meta/content";
 
 const schemaVersion = "https://json-schema.org/draft/2020-XX/schema";
 
-Schema.setConfig(schemaVersion, "keywordReference", true);
-Schema.setConfig(schemaVersion, "keywordRecursiveReference", true);
 Schema.setConfig(schemaVersion, "idToken", "$id");
 Schema.setConfig(schemaVersion, "anchorToken", "$anchor");
-Schema.setConfig(schemaVersion, "recursiveAnchorType", "string");
+Schema.setConfig(schemaVersion, "jsrefToken", "$ref");
+Schema.setConfig(schemaVersion, "dynamicJsrefToken", "$recursiveRef");
+Schema.setConfig(schemaVersion, "dynamicAnchorToken", "$dynamcicAnchor");
+Schema.setConfig(schemaVersion, "commentToken", "$comment");
 Schema.setConfig(schemaVersion, "vocabulary", true);
 Schema.setConfig(schemaVersion, "mandatoryVocabularies", ["https://json-schema.org/draft/2020-XX/vocab/core"]);
 
