@@ -7,10 +7,10 @@
 {:then results}
   {results ? "Valid" : ""}
 {:catch error}
-  {#if error.absoluteKeywordLocation}
+  {#if error.output}
     Invalid
     <ul>
-      {#each error.errors as outputUnit}
+      {#each error.output.errors as outputUnit}
         {#if !outputUnit.valid}
           <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
         {/if}

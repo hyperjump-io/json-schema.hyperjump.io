@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@hyperjump/json-schema": "^0.9.2",
-    "@hyperjump/json-schema-core": "^0.13.2",
+    "@hyperjump/json-schema-core": "^0.13.3",
     "moo": "^0.5.1",
     "morgan": "^1.9.1",
     "polka": "^0.5.0",
