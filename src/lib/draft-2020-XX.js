@@ -11,13 +11,14 @@ import contentMetaSchema from "./meta/draft/2020-XX/meta/content";
 
 const schemaVersion = "https://json-schema.org/draft/2020-XX/schema";
 
-Schema.setConfig(schemaVersion, "idToken", "$id");
+Schema.setConfig(schemaVersion, "baseToken", "$id");
+Schema.setConfig(schemaVersion, "embeddedToken", "$id");
 Schema.setConfig(schemaVersion, "anchorToken", "$anchor");
 Schema.setConfig(schemaVersion, "jsrefToken", "$ref");
 Schema.setConfig(schemaVersion, "dynamicJsrefToken", "$recursiveRef");
 Schema.setConfig(schemaVersion, "dynamicAnchorToken", "$dynamcicAnchor");
 Schema.setConfig(schemaVersion, "commentToken", "$comment");
-Schema.setConfig(schemaVersion, "vocabulary", true);
+Schema.setConfig(schemaVersion, "vocabularyToken", "$vocabulary");
 Schema.setConfig(schemaVersion, "mandatoryVocabularies", ["https://json-schema.org/draft/2020-XX/vocab/core"]);
 
 Schema.add(JSON.parse(metaSchema));
