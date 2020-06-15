@@ -69,7 +69,7 @@
         if (output.valid) {
           return output;
         } else {
-          throw output;
+          throw { output };
         }
       }
     }
