@@ -4,7 +4,7 @@ export default `{
     "$vocabulary": {
       "https://json-schema.org/draft/2020-XX/vocab/content": true
     },
-    "$recursiveAnchor": true,
+    "$dynamicAnchor": "",
 
     "title": "Content vocabulary meta-schema",
 
@@ -12,6 +12,6 @@ export default `{
     "properties": {
         "contentMediaType": { "type": "string" },
         "contentEncoding": { "type": "string" },
-        "contentSchema": { "$recursiveRef": "#" }
+        "contentSchema": { "$dynamicRef": "#" }
     }
 }`;

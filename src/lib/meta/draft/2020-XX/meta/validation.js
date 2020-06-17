@@ -4,7 +4,7 @@ export default `{
     "$vocabulary": {
       "https://json-schema.org/draft/2020-XX/vocab/validation": true
     },
-    "$recursiveAnchor": true,
+    "$dynamicAnchor": "",
 
     "title": "Validation vocabulary meta-schema",
     "type": ["object", "boolean"],

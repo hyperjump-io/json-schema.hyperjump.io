@@ -9,7 +9,7 @@ export default `{
         "https://json-schema.org/draft/2020-XX/vocab/format": false,
         "https://json-schema.org/draft/2020-XX/vocab/content": true
     },
-    "$recursiveAnchor": true,
+    "$dynamicAnchor": "",
 
     "title": "Core and Validation specifications meta-schema",
     "allOf": [
@@ -25,7 +25,7 @@ export default `{
         "definitions": {
             "$comment": "While no longer an official keyword as it is replaced by $defs, this keyword is retained in the meta-schema to prevent incompatible extensions as it remains in common use.",
             "type": "object",
-            "additionalProperties": { "$recursiveRef": "#" },
+            "additionalProperties": { "$dynamicRef": "#" },
             "default": {}
         },
         "dependencies": {
@@ -33,7 +33,7 @@ export default `{
             "type": "object",
             "additionalProperties": {
                 "anyOf": [
-                    { "$recursiveRef": "#" },
+                    { "$dynamicRef": "#" },
                     { "$ref": "meta/validation#/$defs/stringArray" }
                 ]
             }

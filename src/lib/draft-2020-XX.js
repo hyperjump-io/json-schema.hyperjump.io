@@ -15,8 +15,8 @@ Schema.setConfig(schemaVersion, "baseToken", "$id");
 Schema.setConfig(schemaVersion, "embeddedToken", "$id");
 Schema.setConfig(schemaVersion, "anchorToken", "$anchor");
 Schema.setConfig(schemaVersion, "jsrefToken", "$ref");
-Schema.setConfig(schemaVersion, "dynamicJsrefToken", "$recursiveRef");
-Schema.setConfig(schemaVersion, "dynamicAnchorToken", "$dynamcicAnchor");
+Schema.setConfig(schemaVersion, "dynamicJsrefToken", "$dynamicRef");
+Schema.setConfig(schemaVersion, "dynamicAnchorToken", "$dynamicAnchor");
 Schema.setConfig(schemaVersion, "commentToken", "$comment");
 Schema.setConfig(schemaVersion, "vocabularyToken", "$vocabulary");
 Schema.setConfig(schemaVersion, "mandatoryVocabularies", ["https://json-schema.org/draft/2020-XX/vocab/core"]);
@@ -26,9 +26,8 @@ Schema.add(JSON.parse(metaSchema));
 Schema.add(JSON.parse(coreMetaSchema));
 Core.defineVocabulary("https://json-schema.org/draft/2020-XX/vocab/core", {
   "validate": keywords.validate,
-  "$comment": keywords.metaData,
   "$defs": keywords.definitions,
-  "$recursiveRef": keywords.$recursiveRef,
+  "$dynamicRef": keywords.$recursiveRef,
   "$ref": keywords.$ref
 });
 

@@ -4,7 +4,7 @@ export default `{
     "$vocabulary": {
       "https://json-schema.org/draft/2020-XX/vocab/meta-data": true
     },
-    "$recursiveAnchor": true,
+    "$dynamicAnchor": "",
 
     "title": "Meta-data vocabulary meta-schema",
 
