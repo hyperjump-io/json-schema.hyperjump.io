@@ -12,8 +12,10 @@
   "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
-    "@hyperjump/json-schema": "^0.10.0",
+    "@hyperjump/json-schema": "^0.11.0",
     "@hyperjump/json-schema-core": "^0.14.0",
+    "@hyperjump/oas-schema-validator": "^0.1.2",
+    "@hyperjump/json-schema-2020-XX": "github:hyperjump-io/json-schema-validator#2020-XX",
     "moo": "^0.5.1",
     "morgan": "^1.9.1",
     "polka": "^0.5.0",
