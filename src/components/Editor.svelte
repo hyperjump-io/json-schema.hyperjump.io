@@ -5,6 +5,12 @@
   export let theme = "solarized-dark";
   export let value = "";
 
+  let src;
+
+  export const focus = () => {
+    src.focus();
+  }
+
   $: numberOfLines = (value.match(/\n/g) || []).length + 1;
 
   $: tokens = (function () {
@@ -39,7 +45,7 @@
         {/if}
       {/each}
     </pre>
-    <textarea class="src" aria-label="Code Editor" bind:value={value} on:input></textarea>
+    <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} on:input></textarea>
   </div>
 </div>
 

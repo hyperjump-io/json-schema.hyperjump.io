@@ -84,10 +84,10 @@
   <h1>Hyperjump - JSON Schema Validator</h1>
 
   <div class="editor-section">
-    <EditorTabs tabs={schemas} newTab={newSchema} active={0} on:input={updateSchemas} />
+    <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} on:input={updateSchemas} />
   </div>
   <div class="editor-section">
-    <EditorTabs tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} on:input={updateInstances} />
+    <EditorTabs ns="instances" tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} on:input={updateInstances} />
   </div>
 
   <div class="results {theme}">
