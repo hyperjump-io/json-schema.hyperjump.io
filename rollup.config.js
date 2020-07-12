@@ -1,6 +1,6 @@
-import resolve from "rollup-plugin-node-resolve";
-import replace from "rollup-plugin-replace";
-import commonjs from "rollup-plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
+import commonjs from "@rollup/plugin-commonjs";
 import svelte from "rollup-plugin-svelte";
 import { terser } from "rollup-plugin-terser";
 import config from "sapper/config/rollup";
@@ -11,7 +11,6 @@ const mode = process.env.NODE_ENV;
 const dev = mode === "development";
 
 const onwarn = (warning, onwarn) => (warning.code === "CIRCULAR_DEPENDENCY" && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning);
-const dedupe = (importee) => importee === "svelte" || importee.startsWith("svelte/");
 
 export default {
   client: {
@@ -29,7 +28,7 @@ export default {
       }),
       resolve({
         browser: true,
-        dedupe
+        dedupe: ["svelte"]
       }),
       commonjs(),
 
@@ -38,6 +37,7 @@ export default {
       })
     ],
 
+    preserveEntrySignatures: false,
     onwarn
   },
 
@@ -54,14 +54,17 @@ export default {
         dev
       }),
       resolve({
-        dedupe
+        dedupe: ["svelte"]
       }),
       commonjs()
     ],
     external: Object.keys(pkg.dependencies).concat(
-      require("module").builtinModules || Object.keys(process.binding("natives"))
+      require("module").builtinModules || Object.keys(process.binding("natives")),
+      "make-fetch-happen",
+      "minipass-fetch"
     ),
 
+    preserveEntrySignatures: "strict",
     onwarn
   },
 
@@ -78,6 +81,7 @@ export default {
       !dev && terser()
     ],
 
+    preserveEntrySignatures: false,
     onwarn
   }
 };

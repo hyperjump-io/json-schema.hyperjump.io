@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function cleanup {
   rm -rf "$WORK_DIR"
   echo "Deleted temp working directory $WORK_DIR"
