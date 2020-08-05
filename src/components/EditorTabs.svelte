@@ -63,6 +63,7 @@
     background-color: inherit;
     color: inherit;
     padding: 0;
+    margin: 0;
     font: inherit;
     border: none;
   }
@@ -110,5 +111,6 @@
     display: flex;
     overflow: hidden;
     flex-grow: 1;
+    height: 100%;
   }
 </style>

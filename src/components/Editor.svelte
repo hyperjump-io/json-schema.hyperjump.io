@@ -57,6 +57,7 @@
     flex-grow: 1;
     border: var(--editor-border);
     border-top: none;
+    line-height: 1.2;
   }
 
   .line-numbers {

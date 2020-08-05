@@ -7,15 +7,10 @@ body {
   margin: 0;
 }
 
-pre {
-  margin: 0;
-}
-
 #sapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin: 0;
 }
 
 * {
