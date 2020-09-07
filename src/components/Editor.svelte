@@ -81,6 +81,7 @@
     font-family: monospace;
     font-size: inherit;
     white-space: pre;
+    line-height: 1.2;
     padding: 0;
     margin: 0;
     border: none;
