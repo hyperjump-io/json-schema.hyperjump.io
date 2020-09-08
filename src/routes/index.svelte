@@ -6,7 +6,7 @@
   import Footer from "../components/Footer.svelte";
 
   import "@hyperjump/oas-schema-validator";
-  import "@hyperjump/json-schema-2020-XX/lib/draft-2020-XX";
+  import "@hyperjump/json-schema-future/lib/draft-future";
 
 
   const DEBOUNCE_DELAY = 750;

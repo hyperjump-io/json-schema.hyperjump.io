@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@hyperjump/json-schema": "^0.11.2",
-    "@hyperjump/json-schema-2020-XX": "github:hyperjump-io/json-schema-validator#2020-XX",
+    "@hyperjump/json-schema-future": "github:hyperjump-io/json-schema-validator#draft-future",
     "@hyperjump/oas-schema-validator": "^0.1.2",
     "moo": "^0.5.1",
     "morgan": "^1.9.1",
