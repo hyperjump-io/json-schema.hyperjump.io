@@ -5,7 +5,7 @@
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
 
-  //import "@hyperjump/oas-schema-validator";
+  import "@hyperjump/oas-schema-validator";
   import "@hyperjump/json-schema-future/lib/draft-future";
 
 
