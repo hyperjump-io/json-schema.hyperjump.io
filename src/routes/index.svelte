@@ -10,7 +10,7 @@
 
 
   const DEBOUNCE_DELAY = 750;
-  const defaultSchemaVersion = "https://json-schema.org/draft/2019-09/schema";
+  const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
   const theme = "solarized-dark";
