@@ -28,18 +28,24 @@
   <div class="editable">
     <pre class="highlighted">
       {#each tokens as token}
-        {#if token.type === "grouping"}
-          <span class="grouping">{token.value}</span>
-        {:else if token.type === "property"}
-          "<span class="property">{token.value.substring(1, token.value.length - 1)}</span>"
-        {:else if token.type === "string"}
-          "<span class="string">{token.value.substring(1, token.value.length - 1)}</span>"
-        {:else if token.type === "number"}
-          <span class="number">{token.value}</span>
-        {:else if token.type === "boolean"}
-          <span class="boolean">{token.value}</span>
-        {:else if token.type === "null"}
-          <span class="null">{token.value}</span>
+        {#if token.type === "comment"}
+          <span class="comment">{token.value}</span>
+        {:else if token.type === "accent1"}
+          <span class="accent1">{token.value}</span>
+        {:else if token.type === "accent2"}
+          <span class="accent2">{token.value}</span>
+        {:else if token.type === "accent3"}
+          <span class="accent3">{token.value}</span>
+        {:else if token.type === "accent4"}
+          <span class="accent4">{token.value}</span>
+        {:else if token.type === "accent5"}
+          <span class="accent5">{token.value}</span>
+        {:else if token.type === "accent6"}
+          <span class="accent6">{token.value}</span>
+        {:else if token.type === "accent7"}
+          <span class="accent7">{token.value}</span>
+        {:else if token.type === "accent8"}
+          <span class="accent8">{token.value}</span>
         {:else}
           {token.value}
         {/if}
@@ -102,27 +108,39 @@
     overflow: hidden;
   }
 
-  .grouping {
-    color: var(--grouping-color);
+  .comment {
+    color: var(--comment-color);
   }
 
-  .property {
-    color: var(--property-color);
+  .accent1 {
+    color: var(--accent1-color);
   }
 
-  .string {
-    color: var(--string-color);
+  .accent2 {
+    color: var(--accent2-color);
   }
 
-  .number {
-    color: var(--number-color);
+  .accent3 {
+    color: var(--accent3-color);
   }
 
-  .boolean {
-    color: var(--boolean-color);
+  .accent4 {
+    color: var(--accent4-color);
   }
 
-  .null {
-    color: var(--null-color);
+  .accent5 {
+    color: var(--accent5-color);
+  }
+
+  .accent6 {
+    color: var(--accent6-color);
+  }
+
+  .accent7 {
+    color: var(--accent7-color);
+  }
+
+  .accent8 {
+    color: var(--accent8-color);
   }
 </style>

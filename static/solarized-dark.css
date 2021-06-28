@@ -1,16 +1,20 @@
 .solarized-dark {
-  --text-color: #839496;
-  --background-color: #002b36;
+  --text-color: #839496; /* base0 */
+  --background-color: #002b36; /* base03 */
+  --line-focus-background-color: #073642; /* base02 */
+  --comment-color: #586e75; /* base01 */
+  --accent1-color: #b58900; /* yellow */
+  --accent2-color: #cb4b16; /* orange */
+  --accent3-color: #dc322f; /* red */
+  --accent4-color: #d33682; /* magenta */
+  --accent5-color: #6c71c4; /* violet */
+  --accent6-color: #268bd2; /* blue */
+  --accent7-color: #2aa198; /* cyan */
+  --accent8-color: #859900; /* green */
+
   background-color: var(--background-color);
   color: var(--text-color);
   caret-color: var(--text-color);
-  --line-focus-background-color: #073642;
-  --grouping-color: #dc322f;
-  --property-color: #b58900;
-  --string-color: #2aa198;
-  --number-color: #2aa198;
-  --boolean-color: #2aa198;
-  --null-color: #268bd2;
 }
 
 .solarized-dark::-webkit-scrollbar {
