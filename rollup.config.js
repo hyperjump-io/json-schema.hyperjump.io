@@ -19,7 +19,8 @@ module.exports = {
     plugins: [
       replace({
         "process.browser": true,
-        "process.env.NODE_ENV": JSON.stringify(mode)
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        "preventAssignment": true
       }),
       svelte({
         dev,
@@ -47,7 +48,8 @@ module.exports = {
     plugins: [
       replace({
         "process.browser": false,
-        "process.env.NODE_ENV": JSON.stringify(mode)
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        "preventAssignment": true
       }),
       svelte({
         generate: "ssr",
@@ -75,7 +77,8 @@ module.exports = {
       resolve(),
       replace({
         "process.browser": true,
-        "process.env.NODE_ENV": JSON.stringify(mode)
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        "preventAssignment": true
       }),
       commonjs(),
       !dev && terser()
