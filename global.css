@@ -20,3 +20,14 @@ body {
 a {
   color: var(--text-color);
 }
+
+button {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: thin ridge var(--text-color);
+  padding: .25em .5em;
+}
+
+button:hover {
+  cursor: pointer;
+}
