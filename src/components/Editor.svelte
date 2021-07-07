@@ -1,9 +1,11 @@
 <script>
   import jsonLexer from "../lib/json-lexer";
+  import yamlLexer from "../lib/yaml-lexer";
 
 
   export let theme = "solarized-dark";
   export let value = "";
+  export let format = "json";
 
   let src;
 
@@ -14,8 +16,13 @@
   $: numberOfLines = (value.match(/\n/g) || []).length + 1;
 
   $: tokens = (function () {
-    jsonLexer.reset(value);
-    return Array.from(jsonLexer);
+    if (format === "json") {
+      jsonLexer.reset(value);
+      return Array.from(jsonLexer);
+    } else {
+      yamlLexer.reset(value);
+      return Array.from(yamlLexer);
+    }
   }());
 </script>
 

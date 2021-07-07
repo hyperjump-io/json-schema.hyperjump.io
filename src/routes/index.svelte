@@ -1,4 +1,5 @@
 <script>
+  import YAML from "yaml";
   import JsonSchema from "@hyperjump/json-schema";
   import Editor from "../components/Editor.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
@@ -15,15 +16,38 @@
 
   const theme = "solarized-dark";
 
+  let format = "json";
+
+  const parse = (src, format) => {
+    if (format === "yaml") {
+      return YAML.parse(src);
+    } else {
+      return JSON.parse(src);
+    }
+  };
+
+  const newSchemaStub = {
+    json: (id) => `{
+  "$id": "${id}",
+  "$schema": "${defaultSchemaVersion}"
+}`,
+    yaml: (id) => `$id: '${id}'
+$schema: '${defaultSchemaVersion}'`
+  };
+
+  const setFormat = (newFormat) => () => {
+    format = newFormat;
+    schemas = [newSchema("Schema", schemaUrl, true)];
+    instances = [newInstance("Instance")];
+    selectedInstance = 0;
+  };
+
   const newSchema = (function () {
     let sequence = 1;
 
     return (label = undefined, url = undefined, persistent = false) => {
       const id = url || `${schemaUrl}${++sequence}`;
-      return { label: label || `Schema ${sequence}`, text: `{
-  "$id": "${id}",
-  "$schema": "${defaultSchemaVersion}"
-}`, persistent: persistent };
+      return { label: label || `Schema ${sequence}`, text: newSchemaStub[format](id), persistent: persistent };
     }
   }());
 
@@ -52,7 +76,7 @@
   $: validate = (async function () {
     schemas.forEach((schema, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
-      JsonSchema.add(JSON.parse(schema.text || "true"), externalId, defaultSchemaVersion);
+      JsonSchema.add(parse(schema.text || "true", format), externalId, defaultSchemaVersion);
     });
 
     const doc = await JsonSchema.get(schemaUrl);
@@ -67,7 +91,7 @@
       } catch (e) {}
 
       if (v) {
-        const output = v(JSON.parse(instances[selectedInstance].text), JsonSchema.BASIC);
+        const output = v(parse(instances[selectedInstance].text, format), JsonSchema.BASIC);
         if (output.valid) {
           return output;
         } else {
@@ -82,14 +106,18 @@
   <title>Hyperjump - JSON Schema Validator</title>
 </svelte:head>
 
+<div class="format">
+  <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+</div>
+
 <main>
   <h1>Hyperjump - JSON Schema Validator</h1>
 
   <div class="editor-section">
-    <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} on:input={updateSchemas} />
+    <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} bind:format={format} on:input={updateSchemas} />
   </div>
   <div class="editor-section">
-    <EditorTabs ns="instances" tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} on:input={updateInstances} />
+    <EditorTabs ns="instances" tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} bind:format={format} on:input={updateInstances} />
   </div>
 
   <div class="results {theme}">
@@ -121,6 +149,29 @@
 
     --editor-padding: .25em;
     --editor-border: thin solid;
+  }
+
+  .format {
+    position: absolute;
+    margin: 1em;
+    right: 0;
+    background-color: var(--background-color);
+  }
+
+  .format :first-child {
+    border-radius: .25em 0 0 .25em;
+  }
+
+  .format :last-child {
+    border-radius: 0 .25em .25em 0;
+  }
+
+  .format button:hover {
+    opacity: 100%;
+  }
+
+  .format :not(.selected) {
+    opacity: 50%;
   }
 
   .editor-section {

@@ -9,6 +9,7 @@
   export let active = 0;
   export let selected = 0;
   export let minTabs = 1;
+  export let format = "json";
 
   let editor;
 
@@ -55,7 +56,7 @@
   {/if}
 </div>
 <div role="tabpanel" id="tabpanel" aria-labelledby={`${ns}-tab-${selected}`}>
-  <Editor bind:this={editor} bind:value={tabs[selected].text} on:input={(event) => dispatch("input", tabs)} />
+  <Editor bind:this={editor} bind:value={tabs[selected].text} bind:format={format} on:input={(event) => dispatch("input", tabs)} />
 </div>
 
 <style>
