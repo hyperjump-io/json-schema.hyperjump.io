@@ -7,13 +7,13 @@ const hexdig = `[0-9a-fA-F]`;
 
 // String
 const char = `(?:\\\\["\\/\\\\brfnt]|\\\\u${hexdig}{4}|[^"\\\\])`;
-const propertyStart = `"(?=.*"\\s*:)`;
+const propertyStart = `"(?=[^"]*"\\s*:)`;
 
 // Number
 const int = `(?:0|${digit19}${digit}*)`;
 const frac = `\\.${digit}+`;
 const e = `[eE]`;
-const exp = `${e}[-+]${digit}+`;
+const exp = `${e}[-+]?${digit}+`;
 const number = `-?${int}(?:${frac})?(?:${exp})?`;
 
 // Whitespace
