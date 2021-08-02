@@ -26,6 +26,7 @@ button {
   color: var(--text-color);
   border: thin ridge var(--text-color);
   padding: .25em .5em;
+  margin: 0;
 }
 
 button:hover {
