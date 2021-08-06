@@ -13,7 +13,7 @@
   "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
-    "@hyperjump/json-schema": "^0.17.1",
+    "@hyperjump/json-schema": "^0.17.2",
     "@hyperjump/json-schema-future": "github:hyperjump-io/json-schema-validator#draft-future",
     "@hyperjump/oas-schema-validator": "^0.4.0",
     "moo": "^0.5.1",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^2.3.4",
     "chai": "^4.3.4",
     "eslint": "^6.7.1",
