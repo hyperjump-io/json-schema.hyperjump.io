@@ -7,7 +7,7 @@ body {
   margin: 0;
 }
 
-#sapper {
+#svelte {
   display: flex;
   flex-direction: column;
   height: 100%;
