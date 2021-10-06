@@ -11,7 +11,7 @@
 
   export const focus = () => {
     src.focus();
-  }
+  };
 
   $: numberOfLines = (value.match(/\n/g) || []).length + 1;
 

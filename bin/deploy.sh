@@ -18,7 +18,7 @@ if [[ ! "$WORK_DIR" || ! -d "$WORK_DIR" ]]; then
   exit 1
 fi
 
-npm run export
+npm run build
 
 cd "$WORK_DIR"
 
@@ -29,7 +29,8 @@ git rm -r -q .
 git reset -q HEAD CNAME
 git checkout -q -- CNAME
 
-cp -rp "$DIR"/../__sapper__/export/* .
+cp -rp "$DIR"/../build/* .
+touch .nojekyll
 git add .
 
 git commit

@@ -1,13 +1,12 @@
 <script>
   import YAML from "yaml";
   import JsonSchema from "@hyperjump/json-schema";
-  import Editor from "../components/Editor.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
 
   import "@hyperjump/oas-schema-validator";
-  import "@hyperjump/json-schema-future/lib/draft-future";
+  import "@hyperjump/json-schema-future";
 
 
   const DEBOUNCE_DELAY = 750;
@@ -48,7 +47,7 @@ $schema: '${defaultSchemaVersion}'`
     return (label = undefined, url = undefined, persistent = false) => {
       const id = url || `${schemaUrl}${++sequence}`;
       return { label: label || `Schema ${sequence}`, text: newSchemaStub[format](id), persistent: persistent };
-    }
+    };
   }());
 
   const newInstance = (function () {
@@ -88,7 +87,7 @@ $schema: '${defaultSchemaVersion}'`
       let v;
       try {
         v = await validate;
-      } catch (e) {}
+      } catch (e) { /* ignore */ }
 
       if (v) {
         const output = v(parse(instances[selectedInstance].text, format), JsonSchema.BASIC);

@@ -1,4 +1,5 @@
-node_modules/
-src/node_modules/@sapper/
-__sapper__/
-http-cache/
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package

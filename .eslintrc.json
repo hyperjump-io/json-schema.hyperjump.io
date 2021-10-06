@@ -1,19 +1,18 @@
 {
   "root": true,
   "env": {
-    "es6": true,
-    "node": true,
+    "es2017": true,
     "mocha": true,
     "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2019,
     "sourceType": "module"
   },
   "extends": [
     "eslint:recommended"
   ],
-  "plugins": ["import"],
+  "plugins": ["import", "svelte3"],
   "rules": {
     "array-bracket-spacing": ["error", "never"],
     "arrow-parens": ["error", "always"],
@@ -23,8 +22,9 @@
     "import/no-unresolved": ["error", { "commonjs": true }],
     "import/extensions": ["error", "always", { "js": "never", "mjs": "never" }],
     "import/newline-after-import": ["error", { "count": 2 }],
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "ignoreComments": true }],
     "linebreak-style": ["error", "unix"],
+    "no-prototype-builtins": ["off"],
     "no-trailing-spaces": "error",
     "no-tabs": "error",
     "no-unused-vars": ["error", { "argsIgnorePattern": "_.*" }],
@@ -34,5 +34,11 @@
   },
   "settings": {
     "import/resolver": "node"
-  }
+  },
+	"overrides": [
+    {
+      "files": ["*.svelte"],
+      "processor": "svelte3/svelte3"
+    }
+  ]
 }

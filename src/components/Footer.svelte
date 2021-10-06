@@ -1,7 +1,7 @@
 <script>
   import GitHubLink from "./GitHubLink.svelte";
   import NpmLink from "./NpmLink.svelte";
-  import JsonSchemaLink from "./JsonSchemaLink.svelte";
+  import JsonSchemaLink from "./JsonSchemaLink.svelte"; // eslint-disable-line import/newline-after-import
 </script>
 
 <footer>

@@ -2,13 +2,13 @@
   "name": "json-schema.hyperjump.io",
   "description": "Validate JSON Schema documents online",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
-    "dev": "sapper dev",
-    "build": "sapper build",
-    "export": "sapper export",
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "preview": "svelte-kit preview",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "node __sapper__/build",
-    "test": "mocha --require esm 'src/lib/**/*.spec.js'"
+    "test": "mocha 'src/lib/**/*.spec.js'"
   },
   "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
@@ -17,24 +17,16 @@
     "@hyperjump/json-schema-future": "github:hyperjump-io/json-schema-validator#draft-future",
     "@hyperjump/oas-schema-validator": "^0.4.0",
     "moo": "^0.5.1",
-    "morgan": "^1.9.1",
-    "polka": "^0.5.0",
-    "sirv": "^0.4.6",
-    "yaml": "^2.0.0-6"
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "@rollup/plugin-replace": "^2.3.4",
+    "@sveltejs/adapter-static": "^1.0.0-next.20",
+    "@sveltejs/kit": "next",
     "chai": "^4.3.4",
-    "eslint": "^6.7.1",
-    "eslint-plugin-import": "^2.23.4",
-    "esm": "^3.2.25",
-    "mocha": "^9.0.3",
-    "rollup": "^2.52.0",
-    "rollup-plugin-svelte": "^6.1.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "sapper": "^0.27.16",
-    "svelte": "^3.38.2"
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-svelte3": "^3.2.1",
+    "mocha": "^9.1.2",
+    "svelte": "^3.42.6"
   }
 }
