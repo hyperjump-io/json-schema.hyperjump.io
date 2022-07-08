@@ -4,29 +4,32 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview",
+    "dev": "vite dev",
+    "build": "vite build",
+    "package": "svelte-kit package",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync",
     "lint": "eslint --ignore-path .gitignore .",
     "test": "mocha 'src/lib/**/*.spec.js'"
   },
   "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
-    "@hyperjump/json-schema": "^0.18.1",
-    "@hyperjump/json-schema-future": "github:hyperjump-io/json-schema-validator#draft-future",
-    "@hyperjump/oas-schema-validator": "^0.5.0",
-    "moo": "^0.5.1",
-    "yaml": "^1.10.2"
+    "@hyperjump/json-schema": "*",
+    "@hyperjump/json-schema-future": "github:hyperjump-io/json-schema-validator#draft-next",
+    "@hyperjump/oas-schema-validator": "*",
+    "moo": "*",
+    "yaml": "*"
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "^1.0.0-next.20",
+    "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
-    "chai": "^4.3.4",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-svelte3": "^3.2.1",
-    "mocha": "^9.1.2",
-    "svelte": "^3.42.6"
+    "chai": "*",
+    "eslint": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-svelte3": "*",
+    "mocha": "*",
+    "svelte": "*",
+    "vite": "*"
   }
 }

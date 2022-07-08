@@ -34,7 +34,7 @@
   </div>
   <div class="editable">
     <pre class="highlighted">
-      {#each tokens as token}
+{#each tokens as token}
         {#if token.type === "comment"}
           <span class="comment">{token.value}</span>
         {:else if token.type === "accent1"}
