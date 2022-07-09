@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import lexer from "./yaml-lexer";
+import lexer from "./yaml-lexer.js";
 
 
 describe("YAML Lexer", () => {

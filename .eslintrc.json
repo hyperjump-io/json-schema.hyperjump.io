@@ -20,7 +20,6 @@
     "brace-style": ["error", "1tbs"],
     "comma-dangle": ["error", "never"],
     "import/no-unresolved": ["error", { "commonjs": true }],
-    "import/extensions": ["error", "always", { "js": "never", "mjs": "never" }],
     "import/newline-after-import": ["error", { "count": 2 }],
     "indent": ["error", 2, { "ignoreComments": true }],
     "linebreak-style": ["error", "unix"],
