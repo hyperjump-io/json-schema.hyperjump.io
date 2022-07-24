@@ -71,6 +71,10 @@ $schema: '${defaultSchemaVersion}'`
   const updateInstances = debounce((detail) => instances = detail, DEBOUNCE_DELAY);
 
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
+  JsonSchema.addMediaTypePlugin("application/schema+yaml", {
+    parse: async (response) => YAML.parse(await response.text()),
+    matcher: (path) => path.endsWith(".schema.yaml")
+  });
 
   $: validate = (async function () {
     schemas.forEach((schema, ndx) => {
