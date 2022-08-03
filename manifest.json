@@ -1,8 +1,52 @@
 {
-	"background_color": "#ffffff",
-	"theme_color": "#333333",
-	"name": "Hyperjump - JSON Schema Validator",
-	"short_name": "Hyperjump JSV",
-	"display": "standalone",
-	"start_url": "/"
+  ".svelte-kit/runtime/client/start.js": {
+    "file": "_app/immutable/start-050e2744.js",
+    "src": ".svelte-kit/runtime/client/start.js",
+    "isEntry": true,
+    "imports": [
+      "_index-87447f69.js"
+    ],
+    "dynamicImports": [
+      ".svelte-kit/runtime/components/layout.svelte",
+      ".svelte-kit/runtime/components/error.svelte",
+      "src/routes/index.svelte"
+    ]
+  },
+  ".svelte-kit/runtime/components/layout.svelte": {
+    "file": "_app/immutable/layout.svelte-0be125db.js",
+    "src": ".svelte-kit/runtime/components/layout.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-87447f69.js"
+    ]
+  },
+  ".svelte-kit/runtime/components/error.svelte": {
+    "file": "_app/immutable/error.svelte-098aa675.js",
+    "src": ".svelte-kit/runtime/components/error.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-87447f69.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "_app/immutable/pages/index.svelte-45e8e9a2.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-87447f69.js"
+    ],
+    "css": [
+      "_app/immutable/assets/index-10231b84.css"
+    ]
+  },
+  "_index-87447f69.js": {
+    "file": "_app/immutable/chunks/index-87447f69.js"
+  },
+  "src/routes/index.css": {
+    "file": "_app/immutable/assets/index-10231b84.css",
+    "src": "src/routes/index.css"
+  }
 }
