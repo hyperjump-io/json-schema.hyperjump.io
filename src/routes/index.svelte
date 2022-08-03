@@ -6,7 +6,7 @@
   import Footer from "../components/Footer.svelte";
 
   import "@hyperjump/oas-schema-validator";
-  import "@hyperjump/json-schema-future";
+  import "@hyperjump/json-schema-next";
 
 
   const DEBOUNCE_DELAY = 750;
@@ -72,7 +72,7 @@ $schema: '${defaultSchemaVersion}'`
 
   JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
   JsonSchema.addMediaTypePlugin("application/schema+yaml", {
-    parse: async (response) => YAML.parse(await response.text()),
+    parse: async (response) => [YAML.parse(await response.text(), undefined)],
     matcher: (path) => path.endsWith(".schema.yaml")
   });
 
