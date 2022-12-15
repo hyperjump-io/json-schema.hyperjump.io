@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="solarized-dark.css">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="icon" href="favicon.ico">
 
     <script>
       // Force HTTPS
@@ -22,16 +22,18 @@
       }
     </script>
 
-    <!-- This contains the contents of the <svelte:head> component, if
-         the current page has one -->
-    <meta http-equiv="content-security-policy" content=""><title>Hyperjump - JSON Schema Validator</title>
-	<link rel="stylesheet" href="/_app/immutable/assets/index-10231b84.css">
-	<link rel="modulepreload" href="/_app/immutable/start-050e2744.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/index-87447f69.js">
-	<link rel="modulepreload" href="/_app/immutable/layout.svelte-0be125db.js">
-	<link rel="modulepreload" href="/_app/immutable/pages/index.svelte-45e8e9a2.js">
+    <meta http-equiv="content-security-policy" content="">
+		<link href="./_app/immutable/assets/_page-10231b84.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/start-5dc0b473.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index-2d563024.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-4625c06c.js">
+		<link rel="modulepreload" href="./_app/immutable/components/layout.svelte-c48cb2d1.js">
+		<link rel="modulepreload" href="./_app/immutable/modules/pages/_layout.js-9cbb603b.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/_layout-da46b06b.js">
+		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-4fd6afae.js"><title>Hyperjump - JSON Schema Validator</title><!-- HEAD_svelte-14138tz_START --><!-- HEAD_svelte-14138tz_END -->
   </head>
-  <body class="solarized-dark">
+
+  <body class="solarized-dark" data-sveltekit-preload-data="hover">
     <div id="svelte">
 
 
@@ -98,25 +100,20 @@
 
 
 		<script type="module" data-sveltekit-hydrate="1jflm2z">
-		import { set_public_env, start } from "/_app/immutable/start-050e2744.js";
+			import { start } from "./_app/immutable/start-5dc0b473.js";
 
-		set_public_env({});
-
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="1jflm2z"]').parentNode,
-			paths: {"base":"","assets":""},
-			session: {},
-			route: true,
-			spa: false,
-			trailing_slash: "never",
-			hydrate: {
-				status: 200,
-				error: null,
-				nodes: [0, 2],
-				params: {},
-				routeId: ""
-			}
-		});
-	</script></div>
+			start({
+				env: {},
+				paths: {"base":"","assets":""},
+				target: document.querySelector('[data-sveltekit-hydrate="1jflm2z"]').parentNode,
+				version: "1671136062795",
+				hydrate: {
+					node_ids: [0, 2],
+					data: [null,null],
+					form: null
+				}
+			});
+		</script>
+	</div>
   </body>
 </html>
