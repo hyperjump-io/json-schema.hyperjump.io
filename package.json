@@ -14,8 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "@hyperjump/json-schema": "*",
-    "@hyperjump/json-schema-next": "github:hyperjump-io/json-schema-validator#draft-next",
-    "@hyperjump/oas-schema-validator": "*",
     "moo": "*",
     "yaml": "*"
   },

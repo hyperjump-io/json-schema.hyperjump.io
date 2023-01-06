@@ -1,12 +1,19 @@
 <script>
   import YAML from "yaml";
-  import JsonSchema from "@hyperjump/json-schema";
+
+  import { addSchema, validate, setMetaSchemaOutputFormat, addMediaTypePlugin } from "@hyperjump/json-schema";
+  import { setExperimentalKeywordEnabled, BASIC } from "@hyperjump/json-schema/experimental";
+  import "@hyperjump/json-schema/draft-2020-12";
+  import "@hyperjump/json-schema/draft-2019-09";
+  import "@hyperjump/json-schema/draft-07";
+  import "@hyperjump/json-schema/draft-06";
+  import "@hyperjump/json-schema/draft-04";
+  import "@hyperjump/json-schema/openapi-3-1";
+  import "@hyperjump/json-schema/openapi-3-0";
+
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
-
-  import "@hyperjump/oas-schema-validator";
-  import "@hyperjump/json-schema-next";
 
 
   const DEBOUNCE_DELAY = 750;
@@ -70,31 +77,58 @@ $schema: '${defaultSchemaVersion}'`
   const updateSchemas = debounce((detail) => schemas = detail, DEBOUNCE_DELAY);
   const updateInstances = debounce((detail) => instances = detail, DEBOUNCE_DELAY);
 
-  JsonSchema.setMetaOutputFormat(JsonSchema.BASIC);
-  JsonSchema.addMediaTypePlugin("application/schema+yaml", {
-    parse: async (response) => [YAML.parse(await response.text(), undefined)],
+  setMetaSchemaOutputFormat(BASIC);
+  addMediaTypePlugin("application/schema+yaml", {
+    parse: async (response) => [YAML.parse(await response.text())],
     matcher: (path) => path.endsWith(".schema.yaml")
   });
 
-  $: validate = (async function () {
+  addMediaTypePlugin("application/openapi+yaml", {
+    parse: async (response, contentTypeParameters) => {
+      const doc = YAML.parse(await response.text());
+
+      let defaultDialect;
+      const version = doc.openapi || contentTypeParameters.version;
+
+      if (/^3\.0\.\d+(-.+)?$/.test(version)) {
+        defaultDialect = "https://spec.openapis.org/oas/3.0/schema";
+      } else if (/^3\.1\.\d+(-.+)?$/.test(version)) {
+        if (!("jsonSchemaDialect" in doc) || doc.jsonSchemaDialect === "https://spec.openapis.org/oas/3.1/dialect/base") {
+          defaultDialect = "https://spec.openapis.org/oas/3.1/schema-base";
+        } else {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-${encodeURIComponent(doc.jsonSchemaDialect)}`;
+        }
+      } else {
+        throw Error("Invalid OpenAPI document. Add the 'openapi' field and try again.");
+      }
+
+      return [doc, defaultDialect];
+    },
+    matcher: (path) => /(\/|\.)openapi\.yaml$/.test(path)
+  });
+
+  setExperimentalKeywordEnabled("https://json-schema.org/keyword/dynamicRef", true);
+  setExperimentalKeywordEnabled("https://json-schema.org/keyword/propertyDependencies", true);
+  setExperimentalKeywordEnabled("https://json-schema.org/keyword/requireAllExcept", true);
+
+  $: validator = (async function () {
     schemas.forEach((schema, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
-      JsonSchema.add(parse(schema.text || "true", format), externalId, defaultSchemaVersion);
+      addSchema(parse(schema.text || "true", format), externalId, defaultSchemaVersion);
     });
 
-    const doc = await JsonSchema.get(schemaUrl);
-    return JsonSchema.validate(doc);
+    return validate(schemaUrl);
   }());
 
   $: validationResults = (async function () {
     if (instances[selectedInstance].text !== "") {
       let v;
       try {
-        v = await validate;
+        v = await validator;
       } catch (e) { /* ignore */ }
 
       if (v) {
-        const output = v(parse(instances[selectedInstance].text, format), JsonSchema.BASIC);
+        const output = v(parse(instances[selectedInstance].text, format), BASIC);
         if (output.valid) {
           return output;
         } else {
@@ -124,10 +158,10 @@ $schema: '${defaultSchemaVersion}'`
   </div>
 
   <div class="results {theme}">
-    <Results results={validate} />
+    <Results results={validator} />
   </div>
   <div class="results {theme}">
-    {#await validate then _}
+    {#await validator then _}
       <Results results={validationResults} />
     {/await}
   </div>
