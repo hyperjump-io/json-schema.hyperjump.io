@@ -23,14 +23,15 @@
     </script>
 
     <meta http-equiv="content-security-policy" content="">
-		<link href="./_app/immutable/assets/_page-10231b84.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/start-0ca5e86e.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index-40e72a5f.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-e2ce1232.js">
-		<link rel="modulepreload" href="./_app/immutable/components/layout.svelte-92667671.js">
-		<link rel="modulepreload" href="./_app/immutable/modules/pages/_layout.js-9cbb603b.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-9db0e97d.js"><title>Hyperjump - JSON Schema Validator</title><!-- HEAD_svelte-14138tz_START --><!-- HEAD_svelte-14138tz_END -->
+		<link href="./_app/immutable/assets/_page.10231b84.css" rel="stylesheet">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/start.542b45de.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/index.8413c349.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/singletons.e4f37257.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/app.20c96fe8.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/layout.svelte.5999d70f.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/_layout.js.fb1865a6.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/_layout.da46b06b.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/_page.svelte.f3cf57c9.mjs"><title>Hyperjump - JSON Schema Validator</title><!-- HEAD_svelte-14138tz_START --><!-- HEAD_svelte-14138tz_END -->
   </head>
 
   <body class="solarized-dark" data-sveltekit-preload-data="hover">
@@ -99,22 +100,30 @@
 </main>
 
 
-		<script type="module" data-sveltekit-hydrate="1jflm2z">
-			import { start } from "./_app/immutable/start-0ca5e86e.js";
+			
+			<script>
+				{
+					__sveltekit_1eruj4r = {
+						env: {},
+						assets: new URL(".", location.href).pathname.replace(/^\/$/, ''),
+						element: document.currentScript.parentElement
+					};
 
-			start({
-				env: {},
-				paths: {"assets":"","base":""},
-				target: document.querySelector('[data-sveltekit-hydrate="1jflm2z"]').parentNode,
-				version: "1675295007621",
-				hydrate: {
-					node_ids: [0, 2],
-					data: [null,null],
-					form: null,
-					error: null
+					const data = [null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.542b45de.mjs"),
+						import("./_app/immutable/entry/app.20c96fe8.mjs")
+					]).then(([kit, app]) => {
+						kit.start(app, __sveltekit_1eruj4r.element, {
+							node_ids: [0, 2],
+							data,
+							form: null,
+							error: null
+						});
+					});
 				}
-			});
-		</script>
-	</div>
+			</script>
+		</div>
   </body>
 </html>
