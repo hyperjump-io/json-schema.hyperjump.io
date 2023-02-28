@@ -24,14 +24,14 @@
 
     <meta http-equiv="content-security-policy" content="">
 		<link href="./_app/immutable/assets/_page.10231b84.css" rel="stylesheet">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/start.542b45de.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/index.8413c349.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/singletons.e4f37257.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/app.20c96fe8.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/layout.svelte.5999d70f.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/_layout.js.fb1865a6.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/chunks/_layout.da46b06b.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="./_app/immutable/entry/_page.svelte.f3cf57c9.mjs"><title>Hyperjump - JSON Schema Validator</title><!-- HEAD_svelte-14138tz_START --><!-- HEAD_svelte-14138tz_END -->
+		<link rel="modulepreload" href="./_app/immutable/entry/start.f59c61da.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.8413c349.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.3fda0e69.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.2e4821ce.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/layout.svelte.6a8a4738.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/_layout.js.984db11e.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/_layout.da46b06b.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/_page.svelte.a2128cf6.js"><title>Hyperjump - JSON Schema Validator</title><!-- HEAD_svelte-14138tz_START --><!-- HEAD_svelte-14138tz_END -->
   </head>
 
   <body class="solarized-dark" data-sveltekit-preload-data="hover">
@@ -103,19 +103,19 @@
 			
 			<script>
 				{
-					__sveltekit_1eruj4r = {
+					__sveltekit_1ytv62d = {
 						env: {},
-						assets: new URL(".", location.href).pathname.replace(/^\/$/, ''),
+						base: new URL(".", location).pathname.slice(0, -1),
 						element: document.currentScript.parentElement
 					};
 
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.542b45de.mjs"),
-						import("./_app/immutable/entry/app.20c96fe8.mjs")
+						import("./_app/immutable/entry/start.f59c61da.js"),
+						import("./_app/immutable/entry/app.2e4821ce.js")
 					]).then(([kit, app]) => {
-						kit.start(app, __sveltekit_1eruj4r.element, {
+						kit.start(app, __sveltekit_1ytv62d.element, {
 							node_ids: [0, 2],
 							data,
 							form: null,
