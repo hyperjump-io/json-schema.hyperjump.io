@@ -13,7 +13,6 @@
   }
 
   svg {
-    fill: currentColor;
     margin-top: .25em;
     margin-right: .5em;
   }

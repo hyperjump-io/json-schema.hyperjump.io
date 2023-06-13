@@ -1,5 +1,6 @@
 <script>
   import YAML from "yaml";
+  import { onMount } from "svelte";
 
   import { addSchema, validate, setMetaSchemaOutputFormat, addMediaTypePlugin } from "@hyperjump/json-schema";
   import { setExperimentalKeywordEnabled, BASIC } from "@hyperjump/json-schema/experimental";
@@ -11,6 +12,7 @@
   import "@hyperjump/json-schema/openapi-3-1";
   import "@hyperjump/json-schema/openapi-3-0";
 
+  import ThemeSelector from "../components/ThemeSelector.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
@@ -21,6 +23,10 @@
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
   let format = "json";
+
+  onMount(async () => {
+    setFormat(localStorage.getItem("format") || format)();
+  });
 
   const parse = (src, format) => {
     if (format === "yaml") {
@@ -44,6 +50,8 @@ $schema: '${defaultSchemaVersion}'`
     schemas = [newSchema("Schema", schemaUrl, true)];
     instances = [newInstance("Instance")];
     selectedInstance = 0;
+
+    localStorage.setItem("format", format);
   };
 
   const newSchema = (function () {
@@ -144,6 +152,8 @@ $schema: '${defaultSchemaVersion}'`
 <div class="format">
   <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
 </div>
+
+<ThemeSelector />
 
 <main>
   <h1>Hyperjump - JSON Schema Validator</h1>

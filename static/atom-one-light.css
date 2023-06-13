@@ -1,0 +1,10 @@
+:root {
+  --text-color: #383a42;
+  --background-color: #fafafa;
+  --line-focus-background-color: #e0e0e0;
+  --comment-color: #a0a1a7;
+  --accent1-color: #986801; /* property */
+  --accent3-color: #383a42; /* grouping */
+  --accent6-color: #a626a4; /* null */
+  --accent7-color: #50a14f;; /* number, string */
+}

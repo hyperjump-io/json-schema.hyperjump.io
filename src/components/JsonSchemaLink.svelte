@@ -20,7 +20,6 @@
   }
 
   svg {
-    fill: currentColor;
     margin-right: .5em;
   }
 </style>
