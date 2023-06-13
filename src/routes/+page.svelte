@@ -135,6 +135,11 @@ $schema: '${defaultSchemaVersion}'`
       }
     }
   }());
+
+  const setTheme = (event) => {
+    const theme = event.target.value;
+    document.getElementById("theme").href = `${theme}.css`;
+  };
 </script>
 
 <svelte:head>
@@ -143,6 +148,13 @@ $schema: '${defaultSchemaVersion}'`
 
 <div class="format">
   <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+</div>
+
+<div class="theme-selector">
+  <select on:change={setTheme}>
+    <option value="solarized" selected>Solarized</option>
+    <option value="atom-one">Atom One</option>
+  </select>
 </div>
 
 <main>
@@ -191,6 +203,12 @@ $schema: '${defaultSchemaVersion}'`
     margin: 1em;
     right: 0;
     background-color: var(--background-color);
+  }
+
+  .theme-selector {
+    position: absolute;
+    margin: 1em;
+    left: 0;
   }
 
   .format :first-child {
