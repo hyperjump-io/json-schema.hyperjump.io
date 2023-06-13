@@ -1,4 +1,4 @@
-.solarized-dark {
+:root {
   --text-color: #839496; /* base0 */
   --background-color: #002b36; /* base03 */
   --line-focus-background-color: #073642; /* base02 */
@@ -11,31 +11,4 @@
   --accent6-color: #268bd2; /* blue */
   --accent7-color: #2aa198; /* cyan */
   --accent8-color: #859900; /* green */
-
-  background-color: var(--background-color);
-  color: var(--text-color);
-  caret-color: var(--text-color);
-}
-
-.solarized-dark::-webkit-scrollbar {
-  width: 1em;
-}
-
-.solarized-dark {
-  scrollbar-width: thin;
-  scrollbar-color: var(--text-color) var(--background-color);
-}
-
-.solarized-dark::-webkit-scrollbar-track {
-  background: var(--background-color);
-}
-
-.solarized-dark::-webkit-scrollbar-thumb {
-  background-color: var(--text-color) ;
-  border-radius: 6px;
-  border: 3px solid var(--background-color);
-}
-
-.solarized-dark::-webkit-scrollbar-corner {
-  background: var(--background-color);
 }

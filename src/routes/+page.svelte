@@ -20,8 +20,6 @@
   const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
-  const theme = "solarized-dark";
-
   let format = "json";
 
   const parse = (src, format) => {
@@ -157,10 +155,10 @@ $schema: '${defaultSchemaVersion}'`
     <EditorTabs ns="instances" tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} bind:format={format} on:input={updateInstances} />
   </div>
 
-  <div class="results {theme}">
+  <div class="results">
     <Results results={validator} />
   </div>
-  <div class="results {theme}">
+  <div class="results">
     {#await validator then _}
       <Results results={validationResults} />
     {/await}

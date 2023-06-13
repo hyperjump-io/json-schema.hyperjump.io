@@ -3,7 +3,6 @@
   import yamlLexer from "../lib/yaml-lexer";
 
 
-  export let theme = "solarized-dark";
   export let value = "";
   export let format = "json";
 
@@ -26,7 +25,7 @@
   }());
 </script>
 
-<div class="Editor {theme}">
+<div class="Editor">
   <div class="line-numbers">
     {#each [...Array(numberOfLines)] as _, lineNumber}
     <div>{lineNumber + 1}</div>

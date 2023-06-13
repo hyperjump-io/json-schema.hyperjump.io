@@ -5,16 +5,38 @@ html {
 body {
   height: 100%;
   margin: 0;
-}
-
-#svelte {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  caret-color: var(--text-color);
 }
 
 * {
   box-sizing: border-box;
+  scrollbar-color: var(--text-color) var(--background-color);
+}
+
+::-webkit-scrollbar {
+  width: .75em;
+  height: .75em;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 6px;
+  padding: 1em;
+  margin: 1em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-color) ;
+  border-radius: 6px;
+  padding: 1em;
+  margin: 1em;
+  border: 3px solid var(--background-color);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background-color);
 }
 
 a {
@@ -31,4 +53,10 @@ button {
 
 button:hover {
   cursor: pointer;
+}
+
+#svelte {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
