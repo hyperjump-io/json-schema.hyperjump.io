@@ -1,6 +1,5 @@
 <script>
   import YAML from "yaml";
-  import { onMount } from "svelte";
 
   import { addSchema, validate, setMetaSchemaOutputFormat, addMediaTypePlugin } from "@hyperjump/json-schema";
   import { setExperimentalKeywordEnabled, BASIC } from "@hyperjump/json-schema/experimental";
@@ -24,10 +23,6 @@
 
   let format = "json";
 
-  onMount(async () => {
-    setFormat(localStorage.getItem("format") || format)();
-  });
-
   const parse = (src, format) => {
     if (format === "yaml") {
       return YAML.parse(src);
@@ -50,8 +45,6 @@ $schema: '${defaultSchemaVersion}'`
     schemas = [newSchema("Schema", schemaUrl, true)];
     instances = [newInstance("Instance")];
     selectedInstance = 0;
-
-    localStorage.setItem("format", format);
   };
 
   const newSchema = (function () {
