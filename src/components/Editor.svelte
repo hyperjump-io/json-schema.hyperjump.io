@@ -1,4 +1,6 @@
 <script>
+  import YAML from "yaml";
+  import FormatterIcon from "./FormatterIcon.svelte";
   import jsonLexer from "../lib/json-lexer";
   import yamlLexer from "../lib/yaml-lexer";
 
@@ -18,53 +20,68 @@
     if (format === "json") {
       jsonLexer.reset(value);
       return Array.from(jsonLexer);
-    } else {
+    } else if (format === "yaml") {
       yamlLexer.reset(value);
       return Array.from(yamlLexer);
+    } else {
+      throw Error(`Unsupported format: ${format}`);
     }
   }());
+
+  const formatCode = () => {
+    if (format === "json") {
+      value = JSON.stringify(JSON.parse(value), null, "  ");
+    } else if (format === "yaml") {
+      value = YAML.stringify(YAML.parse(value), null, "  ");
+    } else {
+      throw Error(`Unsupported format: ${format}`);
+    }
+  };
 </script>
 
 <div class="Editor">
-  <div class="line-numbers">
-    {#each [...Array(numberOfLines)] as _, lineNumber}
-    <div>{lineNumber + 1}</div>
-    {/each}
-  </div>
-  <div class="editable">
-    <pre class="highlighted">
-{#each tokens as token}
-        {#if token.type === "comment"}
-          <span class="comment">{token.value}</span>
-        {:else if token.type === "accent1"}
-          <span class="accent1">{token.value}</span>
-        {:else if token.type === "accent2"}
-          <span class="accent2">{token.value}</span>
-        {:else if token.type === "accent3"}
-          <span class="accent3">{token.value}</span>
-        {:else if token.type === "accent4"}
-          <span class="accent4">{token.value}</span>
-        {:else if token.type === "accent5"}
-          <span class="accent5">{token.value}</span>
-        {:else if token.type === "accent6"}
-          <span class="accent6">{token.value}</span>
-        {:else if token.type === "accent7"}
-          <span class="accent7">{token.value}</span>
-        {:else if token.type === "accent8"}
-          <span class="accent8">{token.value}</span>
-        {:else}
-          {token.value}
-        {/if}
+  <div class="editor-container">
+    <div class="line-numbers">
+      {#each [...Array(numberOfLines)] as _, lineNumber}
+      <div>{lineNumber + 1}</div>
       {/each}
-    </pre>
-    <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} on:input></textarea>
+    </div>
+    <div class="editable">
+      <pre class="highlighted">
+{#each tokens as token}
+          {#if token.type === "comment"}
+            <span class="comment">{token.value}</span>
+          {:else if token.type === "accent1"}
+            <span class="accent1">{token.value}</span>
+          {:else if token.type === "accent2"}
+            <span class="accent2">{token.value}</span>
+          {:else if token.type === "accent3"}
+            <span class="accent3">{token.value}</span>
+          {:else if token.type === "accent4"}
+            <span class="accent4">{token.value}</span>
+          {:else if token.type === "accent5"}
+            <span class="accent5">{token.value}</span>
+          {:else if token.type === "accent6"}
+            <span class="accent6">{token.value}</span>
+          {:else if token.type === "accent7"}
+            <span class="accent7">{token.value}</span>
+          {:else if token.type === "accent8"}
+            <span class="accent8">{token.value}</span>
+          {:else}
+            {token.value}
+          {/if}
+        {/each}
+      </pre>
+      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} on:input></textarea>
+    </div>
+    <button class="formatter" type="button" title="Format Code" on:click={() => formatCode()}><FormatterIcon /></button>
   </div>
 </div>
 
 <style>
   .Editor {
     display: flex;
-    font-size: 11pt;
+    font-size: large;
     overflow: scroll;
     flex-grow: 1;
     border: var(--editor-border);
@@ -72,7 +89,18 @@
     line-height: 1.2;
   }
 
+  .editor-container {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+  }
+
   .line-numbers {
+    position: -webkit-sticky;
+    position: sticky;
+    font-family: monospace;
+    left: 0;
+    background: var(--background-color);
     padding: var(--editor-padding) 0;
   }
 
@@ -112,6 +140,20 @@
     background-color: transparent;
     -webkit-text-fill-color: transparent;
     overflow: hidden;
+  }
+
+  .formatter {
+    position: -webkit-sticky;
+    position: sticky;
+    align-self: flex-start;
+    top: .5em;
+    right: .5em;
+    border-radius: .5em;
+    opacity: 75%;
+  }
+
+  .formatter:hover {
+    opacity: 100%;
   }
 
   .comment {
