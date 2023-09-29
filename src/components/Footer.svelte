@@ -12,18 +12,13 @@
       </GitHubLink>
     </li>
     <li>
-      <GitHubLink href="https://github.com/hyperjump-io/json-schema-validator">
-        hyperjump-io/json-schema-validator
+      <GitHubLink href="https://github.com/hyperjump-io/json-schema">
+        hyperjump-io/json-schema
       </GitHubLink>
     </li>
     <li>
       <NpmLink href="https://www.npmjs.com/package/@hyperjump/json-schema">
         @hyperjump/json-schema
-      </NpmLink>
-    </li>
-    <li>
-      <NpmLink href="https://www.npmjs.com/package/@hyperjump/json-schema-core">
-        @hyperjump/json-schema-core
       </NpmLink>
     </li>
     <li>
