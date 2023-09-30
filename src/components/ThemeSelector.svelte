@@ -1,9 +1,14 @@
 <script>
+  import Select from "svelte-select";
   import { onMount } from "svelte";
 
 
   let mode;
   let theme;
+  let themes = [
+    { value: "solarized", label: "Solarized" },
+    { value: "atom-one", label: "Atom One" }
+  ];
 
   onMount(async () => {
     mode = localStorage.mode || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -26,7 +31,7 @@
   };
 
   const setTheme = (event) => {
-    theme = event.target.value;
+    theme = event.detail.value;
     localStorage.theme = theme;
 
     document.getElementById("theme").href = `${theme}-${mode}.css`;
@@ -49,10 +54,14 @@
   </button>
 
   {#if theme}
-  <select bind:value={theme} on:change={setTheme}>
-    <option value="solarized">Solarized</option>
-    <option value="atom-one">Atom One</option>
-  </select>
+  <Select class="theme-selector"
+          bind:value={theme}
+          on:change={setTheme}
+          items={themes}
+          showChevron
+          clearable={false}
+          searchable={false}
+  />
   {/if}
 </div>
 
@@ -75,5 +84,32 @@
   svg {
     height: 2em;
     width: 2em;
+  }
+
+  :global(.theme-selector) {
+    height: 2.25em;
+
+    --font-size: 1em;
+    --height: 100%;
+
+    --chevron-width: 100%;
+    --chevron-icon-width: 1em;
+
+    --item-padding: .5em;
+    --padding: 0 .5em 0 .5em;
+
+    --background: var(--background-color);
+    --list-background: var(--background-color);
+    --item-hover-bg: var(--line-focus-background-color);
+    --selected-item-bg: var(--line-focus-background-color);
+    --item-is-active-bg: var(--line-focus-background-color);
+
+    --border: thin solid var(--text-color);
+    --border-focused: thin solid var(--text-color);
+    --list-border: thin solid var(--text-color);
+  }
+
+  :global(.theme-selector.focused) {
+    background-color: var(--line-focus-background-color)!important;
   }
 </style>

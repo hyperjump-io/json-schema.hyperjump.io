@@ -139,7 +139,7 @@ $schema: '${defaultSchemaVersion}'`
 </script>
 
 <svelte:head>
-  <title>Hyperjump - JSON Schema Validator</title>
+  <title>Hyperjump - JSON Schema</title>
 </svelte:head>
 
 <div class="format">
@@ -149,7 +149,7 @@ $schema: '${defaultSchemaVersion}'`
 <ThemeSelector />
 
 <main>
-  <h1>Hyperjump - JSON Schema Validator</h1>
+  <h1>Hyperjump - JSON Schema</h1>
 
   <div class="editor-section">
     <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} bind:format={format} on:input={updateSchemas} />

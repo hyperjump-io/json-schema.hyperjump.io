@@ -15,6 +15,7 @@
   "dependencies": {
     "@hyperjump/json-schema": "*",
     "moo": "*",
+    "svelte-select": "^5.7.0",
     "yaml": "*"
   },
   "devDependencies": {
