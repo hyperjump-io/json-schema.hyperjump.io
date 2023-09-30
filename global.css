@@ -59,21 +59,6 @@ button:hover {
   cursor: pointer;
 }
 
-select {
-  -webkit-appearance: none;
-  color: var(--text-color);
-  background: var(--background-color) calc(100% - 12px) 50% / 12px no-repeat;
-  font-size: inherit;
-  padding: .25em;
-  border: thin solid var(--text-color);
-  border-radius: 6px;
-  padding-right: 2em;
-}
-
-select::-ms-expand {
-  display: none;
-}
-
 #svelte {
   display: flex;
   flex-direction: column;
