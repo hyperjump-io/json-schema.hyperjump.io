@@ -27,7 +27,7 @@
     mode = mode === "dark" ? "light" : "dark";
     localStorage.mode = mode;
 
-    document.getElementById("theme").href = `${theme}-${mode}.css`;
+    document.getElementById("theme").href = `${theme.value}-${mode}.css`;
   };
 
   const setTheme = (event) => {
@@ -39,6 +39,7 @@
 </script>
 
 <div class="ThemeSelector">
+  {#if mode}
   <button class="dark-mode-toggle" on:click={toggleMode}>
     {#if mode === "dark"}
       <svg viewBox="0 0 122.88 122.89">
@@ -52,6 +53,7 @@
       </svg>
     {/if}
   </button>
+  {/if}
 
   {#if theme}
   <Select class="theme-selector"
