@@ -69,36 +69,33 @@
 
 <style>
   .ThemeSelector {
-    position: absolute;
-    margin: 1em;
-    left: 0;
     display: flex;
+    align-items: center;
   }
 
   .dark-mode-toggle {
-    width: 2em;
-    height: 2em;
-    margin: .25em;
-    padding: 0;
     border: none;
+    padding: 0 .25em 0 0;
   }
 
-  svg {
-    height: 2em;
-    width: 2em;
+  .dark-mode-toggle svg {
+    height: 1.5em;
+    width: 1.5em;
   }
 
   :global(.theme-selector) {
-    height: 2.25em;
+    --height: 1.5em;
+    --max-height: 1.5em;
+    --item-height: 1.5em;
 
     --font-size: 1em;
-    --height: 100%;
 
     --chevron-width: 100%;
     --chevron-icon-width: 1em;
 
-    --item-padding: .5em;
-    --padding: 0 .5em 0 .5em;
+    --value-container-padding: 0;
+    --item-padding: 0 .25em 0 .25em;
+    --padding: 0 .25em 0 .25em;
 
     --background: var(--background-color);
     --list-background: var(--background-color);

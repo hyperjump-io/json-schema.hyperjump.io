@@ -142,14 +142,17 @@ $schema: '${defaultSchemaVersion}'`
   <title>Hyperjump - JSON Schema</title>
 </svelte:head>
 
-<div class="format">
-  <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
-</div>
-
-<ThemeSelector />
-
 <main>
-  <h1>Hyperjump - JSON Schema</h1>
+
+  <div class="header">
+    <ThemeSelector />
+
+    <h1>Hyperjump - JSON Schema</h1>
+
+    <div class="format">
+      <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+    </div>
+  </div>
 
   <div class="editor-section">
     <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} bind:format={format} on:input={updateSchemas} />
@@ -173,7 +176,6 @@ $schema: '${defaultSchemaVersion}'`
 <style>
   h1 {
     margin: auto;
-    grid-column-end: span 2;
   }
 
   main {
@@ -189,11 +191,15 @@ $schema: '${defaultSchemaVersion}'`
     --editor-border: thin solid;
   }
 
+  .header {
+    grid-column-end: span 2;
+    display: flex;
+  }
+
   .format {
-    position: absolute;
-    margin: 1em;
-    right: 0;
+    display: flex;
     background-color: var(--background-color);
+    align-items: center;
   }
 
   .format :first-child {
