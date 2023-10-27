@@ -91,13 +91,14 @@
 
   .editor-container {
     display: flex;
+    height: fit-content;
     position: relative;
     flex-grow: 1;
   }
 
   .line-numbers {
-    position: -webkit-sticky;
     position: sticky;
+    height: fit-content;
     font-family: monospace;
     left: 0;
     background: var(--background-color);
@@ -143,7 +144,6 @@
   }
 
   .formatter {
-    position: -webkit-sticky;
     position: sticky;
     align-self: flex-start;
     top: .5em;
