@@ -40,7 +40,7 @@
   {#each tabs as tab, ndx}
   <button role="tab" id={`${ns}-tab-${ndx}`}
        aria-selected={ndx === selected}
-       aria-controls="tabpanel"
+       aria-controls={`${ns}-tabpanel`}
        class:active={ndx === active}
        on:click={() => selectTab(ndx)}>
     <span class="tab-label">{tab.label}</span>
@@ -55,7 +55,7 @@
   </button>
   {/if}
 </div>
-<div role="tabpanel" id="tabpanel" aria-labelledby={`${ns}-tab-${selected}`}>
+<div role="tabpanel" id={`${ns}-tabpanel`} aria-labelledby={`${ns}-tab-${selected}`}>
   <Editor bind:this={editor} bind:value={tabs[selected].text} bind:format={format} on:input={() => dispatch("input", tabs)} />
 </div>
 

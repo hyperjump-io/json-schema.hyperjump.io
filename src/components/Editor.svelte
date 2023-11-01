@@ -84,7 +84,6 @@
 <style>
   .Editor {
     display: flex;
-    font-size: large;
     overflow: scroll;
     flex-grow: 1;
     border: var(--editor-border);

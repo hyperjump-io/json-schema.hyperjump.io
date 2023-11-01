@@ -23,7 +23,7 @@
   </div>
   {/if}
 
-  <button type="button" class="settings-button" on:click={toggleOpen}>
+  <button type="button" class="settings-button" aria-label="Settings" on:click={toggleOpen}>
     <GearIcon size="1.5rem" />
   </button>
 </div>
