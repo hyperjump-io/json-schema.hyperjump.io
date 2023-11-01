@@ -77,8 +77,8 @@
       </pre>
       <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} on:input></textarea>
     </div>
-    <button class="formatter" type="button" title="Format Code" on:click={() => formatCode()}><FormatterIcon /></button>
   </div>
+  <button class="formatter" type="button" title="Format Code" on:click={() => formatCode()}><FormatterIcon /></button>
 </div>
 
 <style>
@@ -93,7 +93,6 @@
 
   .editor-container {
     display: flex;
-    height: fit-content;
     flex-grow: 1;
   }
 
