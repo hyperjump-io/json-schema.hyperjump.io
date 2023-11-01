@@ -12,6 +12,7 @@
   import "@hyperjump/json-schema/openapi-3-0";
 
   import ThemeSelector from "../components/ThemeSelector.svelte";
+  import Settings from "../components/Settings.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
@@ -109,6 +110,7 @@ $schema: '${defaultSchemaVersion}'`
   setExperimentalKeywordEnabled("https://json-schema.org/keyword/dynamicRef", true);
   setExperimentalKeywordEnabled("https://json-schema.org/keyword/propertyDependencies", true);
   setExperimentalKeywordEnabled("https://json-schema.org/keyword/requireAllExcept", true);
+  setExperimentalKeywordEnabled("https://json-schema.org/keyword/itemPattern", true);
 
   $: validator = (async function () {
     schemas.forEach((schema, ndx) => {
@@ -149,8 +151,11 @@ $schema: '${defaultSchemaVersion}'`
 
     <h1>Hyperjump - JSON Schema</h1>
 
-    <div class="format">
-      <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+    <div class="right-controls">
+      <div class="format">
+        <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+      </div>
+      <Settings />
     </div>
   </div>
 
@@ -194,6 +199,11 @@ $schema: '${defaultSchemaVersion}'`
   .header {
     grid-column-end: span 2;
     display: flex;
+  }
+
+  .right-controls {
+    display: flex;
+    align-items: center;
   }
 
   .format {

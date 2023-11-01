@@ -1,5 +1,7 @@
 <script>
+  import { format as jsoncFormat, applyEdits } from "jsonc-parser";
   import YAML from "yaml";
+  import { settings } from "../stores/settings.js";
   import FormatterIcon from "./FormatterIcon.svelte";
   import jsonLexer from "../lib/json-lexer";
   import yamlLexer from "../lib/yaml-lexer";
@@ -30,7 +32,8 @@
 
   const formatCode = () => {
     if (format === "json") {
-      value = JSON.stringify(JSON.parse(value), null, "  ");
+      const edits = jsoncFormat(value, undefined, { tabSize: $settings.indentSize, insertSpaces: true, eol: "\n", keepLines: $settings.keepLines });
+      value = applyEdits(value, edits);
     } else if (format === "yaml") {
       value = YAML.stringify(YAML.parse(value), null, "  ");
     } else {
@@ -92,7 +95,6 @@
   .editor-container {
     display: flex;
     height: fit-content;
-    position: relative;
     flex-grow: 1;
   }
 
