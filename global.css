@@ -59,6 +59,15 @@ button:hover {
   cursor: pointer;
 }
 
+input {
+  margin: 0;
+}
+
+input[type=checkbox] {
+  width: 1em;
+  height: 1em;
+}
+
 #svelte {
   display: flex;
   flex-direction: column;
