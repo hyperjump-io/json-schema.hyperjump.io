@@ -35,7 +35,7 @@
       const edits = jsoncFormat(value, undefined, { tabSize: $settings.indentSize, insertSpaces: true, eol: "\n", keepLines: $settings.keepLines });
       value = applyEdits(value, edits);
     } else if (format === "yaml") {
-      value = YAML.stringify(YAML.parse(value), null, "  ");
+      value = YAML.stringify(YAML.parse(value), null, " ".repeat($settings.indentSize));
     } else {
       throw Error(`Unsupported format: ${format}`);
     }
