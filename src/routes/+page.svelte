@@ -171,7 +171,7 @@ $schema: '${defaultSchemaVersion}'`
     <Results results={validator} />
   </div>
   <div class="results">
-    {#await validator then _}
+    {#await validator then}
       <Results results={validationResults} />
     {/await}
   </div>
