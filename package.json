@@ -7,27 +7,31 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ignore-path .gitignore .",
-    "test": "mocha 'src/lib/**/*.spec.js'"
+    "test": "vitest --watch=false",
+    "lint": "eslint ."
   },
   "repository": "github:hyperjump-io/json-schema.hyperjump.io",
   "license": "MIT",
   "dependencies": {
+    "@hyperjump/browser": "*",
     "@hyperjump/json-schema": "*",
-    "jsonc-parser": "^3.2.0",
+    "content-type": "*",
+    "jsonc-parser": "*",
     "moo": "*",
-    "svelte-select": "^5.7.0",
+    "svelte-select": "*",
     "yaml": "*"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "*",
     "@sveltejs/kit": "*",
-    "chai": "*",
+    "@sveltejs/vite-plugin-svelte": "*",
     "eslint": "*",
+    "eslint-import-resolver-exports": "*",
+    "eslint-import-resolver-node": "*",
     "eslint-plugin-import": "*",
-    "eslint-plugin-svelte3": "*",
-    "mocha": "*",
+    "eslint-plugin-svelte": "*",
     "svelte": "*",
-    "vite": "*"
+    "vite": "*",
+    "vitest": "*"
   }
 }

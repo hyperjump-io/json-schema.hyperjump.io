@@ -3,8 +3,8 @@
   import YAML from "yaml";
   import { settings } from "../stores/settings.js";
   import FormatterIcon from "./FormatterIcon.svelte";
-  import jsonLexer from "../lib/json-lexer";
-  import yamlLexer from "../lib/yaml-lexer";
+  import jsonLexer from "../lib/json-lexer.js";
+  import yamlLexer from "../lib/yaml-lexer.js";
 
 
   export let value = "";

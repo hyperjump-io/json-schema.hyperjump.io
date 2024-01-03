@@ -1,8 +1,11 @@
 <script>
+  import contentTypeParser from "content-type";
   import YAML from "yaml";
 
-  import { addSchema, validate, setMetaSchemaOutputFormat, addMediaTypePlugin } from "@hyperjump/json-schema";
-  import { setExperimentalKeywordEnabled, BASIC } from "@hyperjump/json-schema/experimental";
+  import { setMetaSchemaOutputFormat } from "@hyperjump/json-schema";
+  import { addMediaTypePlugin } from "@hyperjump/browser";
+  import { buildSchemaDocument, getSchema, compile, interpret, BASIC } from "@hyperjump/json-schema/experimental";
+  import * as Instance from "@hyperjump/json-schema/instance/experimental";
   import "@hyperjump/json-schema/draft-2020-12";
   import "@hyperjump/json-schema/draft-2019-09";
   import "@hyperjump/json-schema/draft-07";
@@ -74,52 +77,81 @@ $schema: '${defaultSchemaVersion}'`
       timer = setTimeout(() => fn(detail), delay);
     };
   };
-  const updateSchemas = debounce((detail) => schemas = detail, DEBOUNCE_DELAY);
-  const updateInstances = debounce((detail) => instances = detail, DEBOUNCE_DELAY);
+
+  const updateSchemas = debounce((detail) => {
+    schemas = detail;
+  }, DEBOUNCE_DELAY);
+
+  const updateInstances = debounce((detail) => {
+    instances = detail;
+  }, DEBOUNCE_DELAY);
 
   setMetaSchemaOutputFormat(BASIC);
+
   addMediaTypePlugin("application/schema+yaml", {
-    parse: async (response) => [YAML.parse(await response.text())],
-    matcher: (path) => path.endsWith(".schema.yaml")
+    parse: async (response) => {
+      const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
+      const contextDialectId = contentType.parameters.schema ?? contentType.parameters.profile;
+
+      const schema = YAML.parse(await response.text());
+      return buildSchemaDocument(schema, response.url, contextDialectId);
+    },
+    fileMatcher: (path) => path.endsWith(".schema.json")
   });
 
   addMediaTypePlugin("application/openapi+yaml", {
-    parse: async (response, contentTypeParameters) => {
-      const doc = YAML.parse(await response.text());
+    parse: async (response) => {
+      const doc = await response.json();
 
       let defaultDialect;
-      const version = doc.openapi || contentTypeParameters.version;
+      const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
+      const version = doc.openapi || contentType.parameters.version;
 
-      if (/^3\.0\.\d+(-.+)?$/.test(version)) {
-        defaultDialect = "https://spec.openapis.org/oas/3.0/schema";
+      if (!version) {
+        throw Error("Invalid OpenAPI document. Add the 'openapi' field and try again.");
       } else if (/^3\.1\.\d+(-.+)?$/.test(version)) {
+        defaultDialect = "https://spec.openapis.org/oas/3.0/schema";
+      } else if (/^3\.0\.\d+(-.+)?$/.test(version)) {
         if (!("jsonSchemaDialect" in doc) || doc.jsonSchemaDialect === "https://spec.openapis.org/oas/3.1/dialect/base") {
           defaultDialect = "https://spec.openapis.org/oas/3.1/schema-base";
+        } else if (doc.jsonSchemaDialect === "https://json-schema.org/draft/2020-12/schema") {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-draft-2020-12`;
+        } else if (doc.jsonSchemaDialect === "https://json-schema.org/draft/2019-09/schema") {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-draft-2019-09`;
+        } else if (doc.jsonSchemaDialect === "http://json-schema.org/draft-07/schema#") {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-draft-07`;
+        } else if (doc.jsonSchemaDialect === "http://json-schema.org/draft-06/schema#") {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-draft-06`;
+        } else if (doc.jsonSchemaDialect === "http://json-schema.org/draft-04/schema#") {
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-draft-04`;
         } else {
-          defaultDialect = `https://spec.openapis.org/oas/3.1/schema-${encodeURIComponent(doc.jsonSchemaDialect)}`;
+          defaultDialect = `https://spec.openapis.org/oas/3.1/schema?${encodeURIComponent(doc.jsonSchemaDialect)}`;
         }
       } else {
-        throw Error("Invalid OpenAPI document. Add the 'openapi' field and try again.");
+        throw Error(`Encountered unsupported OpenAPI version '${version}' in ${response.url}`);
       }
 
-      return [doc, defaultDialect];
+      return buildSchemaDocument(doc, response.url, defaultDialect);
     },
-    matcher: (path) => /(\/|\.)openapi\.yaml$/.test(path)
+    fileMatcher: (path) => /(\/|\.)openapi\.json$/.test(path)
   });
 
-  setExperimentalKeywordEnabled("https://json-schema.org/keyword/dynamicRef", true);
-  setExperimentalKeywordEnabled("https://json-schema.org/keyword/propertyDependencies", true);
-  setExperimentalKeywordEnabled("https://json-schema.org/keyword/requireAllExcept", true);
-  setExperimentalKeywordEnabled("https://json-schema.org/keyword/itemPattern", true);
-  setExperimentalKeywordEnabled("https://json-schema.org/keyword/conditional", true);
-
   $: validator = (async function () {
-    schemas.forEach((schema, ndx) => {
+    const schemaDocuments = {};
+    schemas.forEach((tab, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
-      addSchema(parse(schema.text || "true", format), externalId, defaultSchemaVersion);
+      const schema = parse(tab.text || "true", format);
+      const schemaDocument = buildSchemaDocument(schema, externalId, defaultSchemaVersion);
+      schemaDocuments[schemaDocument.baseUri] = schemaDocument;
+
+      if (externalId) {
+        schemaDocuments[externalId] = schemaDocument;
+      }
     });
 
-    return validate(schemaUrl);
+    const schema = await getSchema(schemaUrl, { _cache: schemaDocuments });
+    const compiled = await compile(schema);
+    return (value, outputFormat) => interpret(compiled, Instance.cons(value), outputFormat);
   }());
 
   $: validationResults = (async function () {
@@ -154,17 +186,32 @@ $schema: '${defaultSchemaVersion}'`
 
     <div class="right-controls">
       <div class="format">
-        <button class="{format === 'json' ? 'selected' : ''}" on:click={setFormat("json")}>JSON</button><button class="{format === 'yaml' ? 'selected' : ''}" on:click={setFormat("yaml")}>YAML</button>
+        <button class={format === "json" ? "selected" : ""} on:click={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} on:click={setFormat("yaml")}>YAML</button>
       </div>
       <Settings />
     </div>
   </div>
 
   <div class="editor-section">
-    <EditorTabs ns="schemas" tabs={schemas} newTab={newSchema} active={0} bind:format={format} on:input={updateSchemas} />
+    <EditorTabs
+      ns="schemas"
+      tabs={schemas}
+      newTab={newSchema}
+      active={0}
+      bind:format={format}
+      on:input={updateSchemas}
+    />
   </div>
   <div class="editor-section">
-    <EditorTabs ns="instances" tabs={instances} bind:selected={selectedInstance} bind:active={selectedInstance} newTab={newInstance} bind:format={format} on:input={updateInstances} />
+    <EditorTabs
+      ns="instances"
+      tabs={instances}
+      bind:selected={selectedInstance}
+      bind:active={selectedInstance}
+      newTab={newInstance}
+      bind:format={format}
+      on:input={updateInstances}
+    />
   </div>
 
   <div class="results">

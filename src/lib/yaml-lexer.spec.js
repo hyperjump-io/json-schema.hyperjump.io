@@ -1,9 +1,9 @@
-import { expect } from "chai";
+import { describe, test, expect } from "vitest";
 import lexer from "./yaml-lexer.js";
 
 
 describe("YAML Lexer", () => {
-  it("true", () => {
+  test("true", () => {
     lexer.reset("true");
     const tokens = Array.from(lexer);
 
@@ -12,7 +12,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("true");
   });
 
-  it("false", () => {
+  test("false", () => {
     lexer.reset("false");
     const tokens = Array.from(lexer);
 
@@ -21,7 +21,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("false");
   });
 
-  it("null", () => {
+  test("null", () => {
     lexer.reset("null");
     const tokens = Array.from(lexer);
 
@@ -30,7 +30,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("null");
   });
 
-  it("'foo'", () => {
+  test("'foo'", () => {
     lexer.reset("'foo'");
     const tokens = Array.from(lexer);
 
@@ -39,7 +39,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("'foo'");
   });
 
-  it("'foo\\'bar'", () => {
+  test("'foo\\'bar'", () => {
     lexer.reset("'foo\\'bar'");
     const tokens = Array.from(lexer);
 
@@ -48,7 +48,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("'foo\\'bar'");
   });
 
-  it("\"foo\"", () => {
+  test("\"foo\"", () => {
     lexer.reset("\"foo\"");
     const tokens = Array.from(lexer);
 
@@ -57,7 +57,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("\"foo\"");
   });
 
-  it("\"foo\\\"bar\"", () => {
+  test("\"foo\\\"bar\"", () => {
     lexer.reset("\"foo\\\"bar\"");
     const tokens = Array.from(lexer);
 
@@ -66,7 +66,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("\"foo\\\"bar\"");
   });
 
-  it("42", () => {
+  test("42", () => {
     lexer.reset("42");
     const tokens = Array.from(lexer);
 
@@ -75,7 +75,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("42");
   });
 
-  it("-42", () => {
+  test("-42", () => {
     lexer.reset("-42");
     const tokens = Array.from(lexer);
 
@@ -84,7 +84,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("-42");
   });
 
-  it("4.2", () => {
+  test("4.2", () => {
     lexer.reset("4.2");
     const tokens = Array.from(lexer);
 
@@ -93,7 +93,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("4.2");
   });
 
-  it("4.2e2", () => {
+  test("4.2e2", () => {
     lexer.reset("4.2e2");
     const tokens = Array.from(lexer);
 
@@ -102,7 +102,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("4.2e2");
   });
 
-  it("foo", () => {
+  test("foo", () => {
     lexer.reset("foo");
     const tokens = Array.from(lexer);
 
@@ -111,7 +111,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("foo");
   });
 
-  it("foo:bar", () => {
+  test("foo:bar", () => {
     lexer.reset("foo:bar");
     const tokens = Array.from(lexer);
 
@@ -120,7 +120,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("foo:bar");
   });
 
-  it("foo bar", () => {
+  test("foo bar", () => {
     lexer.reset("foo bar");
     const tokens = Array.from(lexer);
 
@@ -129,7 +129,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("foo bar");
   });
 
-  it("foo:", () => {
+  test("foo:", () => {
     lexer.reset("foo:");
     const tokens = Array.from(lexer);
 
@@ -140,7 +140,7 @@ describe("YAML Lexer", () => {
     expect(tokens[1].value).to.equal(":");
   });
 
-  it("'foo':", () => {
+  test("'foo':", () => {
     lexer.reset("'foo':");
     const tokens = Array.from(lexer);
 
@@ -151,7 +151,7 @@ describe("YAML Lexer", () => {
     expect(tokens[1].value).to.equal(":");
   });
 
-  it("fo'o:", () => {
+  test("fo'o:", () => {
     lexer.reset("fo'o:");
     const tokens = Array.from(lexer);
 
@@ -162,7 +162,7 @@ describe("YAML Lexer", () => {
     expect(tokens[1].value).to.equal(":");
   });
 
-  it("foo: bar", () => {
+  test("foo: bar", () => {
     lexer.reset("foo: bar");
     const tokens = Array.from(lexer);
 
@@ -177,7 +177,7 @@ describe("YAML Lexer", () => {
     expect(tokens[3].value).to.equal("bar");
   });
 
-  it("foo: 'bar'", () => {
+  test("foo: 'bar'", () => {
     lexer.reset("foo: 'bar'");
     const tokens = Array.from(lexer);
 
@@ -192,7 +192,7 @@ describe("YAML Lexer", () => {
     expect(tokens[3].value).to.equal("'bar'");
   });
 
-  it("foo: bar:", () => {
+  test("foo: bar:", () => {
     lexer.reset("foo: bar:");
     const tokens = Array.from(lexer);
 
@@ -209,7 +209,7 @@ describe("YAML Lexer", () => {
     expect(tokens[4].value).to.equal(":");
   });
 
-  it("foo: - bar", () => {
+  test("foo: - bar", () => {
     lexer.reset("foo: - bar");
     const tokens = Array.from(lexer);
 
@@ -228,7 +228,7 @@ describe("YAML Lexer", () => {
     expect(tokens[5].value).to.equal("bar");
   });
 
-  it("foo:\nbar:", () => {
+  test("foo:\nbar:", () => {
     lexer.reset("foo:\nbar:");
     const tokens = Array.from(lexer);
 
@@ -245,7 +245,7 @@ describe("YAML Lexer", () => {
     expect(tokens[4].value).to.equal(":");
   });
 
-  it("foo: bar\nbaz:", () => {
+  test("foo: bar\nbaz:", () => {
     lexer.reset("foo: bar\nbaz:");
     const tokens = Array.from(lexer);
 
@@ -266,7 +266,7 @@ describe("YAML Lexer", () => {
     expect(tokens[6].value).to.equal(":");
   });
 
-  it("foo: a b c\nbaz:", () => {
+  test("foo: a b c\nbaz:", () => {
     lexer.reset("foo: a b c\nbaz:");
     const tokens = Array.from(lexer);
 
@@ -287,7 +287,7 @@ describe("YAML Lexer", () => {
     expect(tokens[6].value).to.equal(":");
   });
 
-  it("foo: bar\n  baz:", () => {
+  test("foo: bar\n  baz:", () => {
     lexer.reset("foo: bar\n  baz:");
     const tokens = Array.from(lexer);
 
@@ -308,7 +308,7 @@ describe("YAML Lexer", () => {
     expect(tokens[6].value).to.equal(":");
   });
 
-  it("- foo", () => {
+  test("- foo", () => {
     lexer.reset("- foo");
     const tokens = Array.from(lexer);
 
@@ -321,7 +321,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal("foo");
   });
 
-  it("- foo - bar", () => {
+  test("- foo - bar", () => {
     lexer.reset("- foo - bar");
     const tokens = Array.from(lexer);
 
@@ -334,7 +334,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal("foo - bar");
   });
 
-  it("- 'foo'", () => {
+  test("- 'foo'", () => {
     lexer.reset("- 'foo'");
     const tokens = Array.from(lexer);
 
@@ -347,7 +347,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal("'foo'");
   });
 
-  it("- foo:", () => {
+  test("- foo:", () => {
     lexer.reset("- foo:");
     const tokens = Array.from(lexer);
 
@@ -362,7 +362,7 @@ describe("YAML Lexer", () => {
     expect(tokens[3].value).to.equal(":");
   });
 
-  it("[foo]", () => {
+  test("[foo]", () => {
     lexer.reset("[foo]");
     const tokens = Array.from(lexer);
 
@@ -375,7 +375,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal("]");
   });
 
-  it("[foo, 42, 'bar']", () => {
+  test("[foo, 42, 'bar']", () => {
     lexer.reset("[foo, 42, 'bar']");
     const tokens = Array.from(lexer);
 
@@ -400,7 +400,7 @@ describe("YAML Lexer", () => {
     expect(tokens[8].value).to.equal("]");
   });
 
-  it("[foo: 42, 'bar': baz:]", () => {
+  test("[foo: 42, 'bar': baz:]", () => {
     lexer.reset("[foo: 42, 'bar': baz:]");
     const tokens = Array.from(lexer);
 
@@ -431,7 +431,7 @@ describe("YAML Lexer", () => {
     expect(tokens[11].value).to.equal("]");
   });
 
-  it("#foo", () => {
+  test("#foo", () => {
     lexer.reset("#foo");
     const tokens = Array.from(lexer);
 
@@ -440,7 +440,7 @@ describe("YAML Lexer", () => {
     expect(tokens[0].value).to.equal("#foo");
   });
 
-  it("foo #foo", () => {
+  test("foo #foo", () => {
     lexer.reset("foo #foo");
     const tokens = Array.from(lexer);
 
@@ -453,7 +453,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal("#foo");
   });
 
-  it("foo: bar #baz", () => {
+  test("foo: bar #baz", () => {
     lexer.reset("foo: bar #baz");
     const tokens = Array.from(lexer);
 
@@ -472,7 +472,7 @@ describe("YAML Lexer", () => {
     expect(tokens[5].value).to.equal("#baz");
   });
 
-  it("[foo #bar]", () => {
+  test("[foo #bar]", () => {
     lexer.reset("[foo #bar]");
     const tokens = Array.from(lexer);
 
@@ -487,7 +487,7 @@ describe("YAML Lexer", () => {
     expect(tokens[3].value).to.equal("#bar]");
   });
 
-  it("{foo:", () => {
+  test("{foo:", () => {
     lexer.reset("{foo:");
     const tokens = Array.from(lexer);
 
@@ -500,7 +500,7 @@ describe("YAML Lexer", () => {
     expect(tokens[2].value).to.equal(":");
   });
 
-  it("{foo: bar\nbaz: 42", () => {
+  test("{foo: bar\nbaz: 42", () => {
     lexer.reset("{foo: bar\nbaz: 42");
     const tokens = Array.from(lexer);
 

@@ -1,11 +1,11 @@
 <script>
-  import { createEventDispatcher } from  "svelte";
+  import { createEventDispatcher } from "svelte";
   import Editor from "../components/Editor.svelte";
 
 
   export let ns = "";
   export let tabs = [];
-  export let newTab = undefined;
+  export let newTab;
   export let active = 0;
   export let selected = 0;
   export let minTabs = 1;
