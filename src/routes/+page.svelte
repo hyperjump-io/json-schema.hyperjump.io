@@ -151,7 +151,7 @@ $schema: '${defaultSchemaVersion}'`
 
     const schema = await getSchema(schemaUrl, { _cache: schemaDocuments });
     const compiled = await compile(schema);
-    return (value, outputFormat) => interpret(compiled, Instance.cons(value), outputFormat);
+    return (value, outputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
   }());
 
   $: validationResults = (async function () {
