@@ -11,9 +11,7 @@
     Invalid
     <ul>
       {#each error.output.errors as outputUnit}
-        {#if !outputUnit.valid && !outputUnit.keyword.endsWith("#validate")}
-          <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
-        {/if}
+        <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
       {/each}
     </ul>
   {:else}
