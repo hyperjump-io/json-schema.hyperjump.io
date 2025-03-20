@@ -1,6 +1,5 @@
 import { writable } from "svelte/store";
-import { browser } from "$app/environment";
-
+import { browser } from "$app/environment"; // eslint-disable-line import/no-unresolved
 
 export let settings;
 

@@ -1,7 +1,6 @@
 import { describe, test, expect } from "vitest";
 import lexer from "./yaml-lexer.js";
 
-
 describe("YAML Lexer", () => {
   test("true", () => {
     lexer.reset("true");

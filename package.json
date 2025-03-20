@@ -22,15 +22,16 @@
     "yaml": "*"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "*",
     "@sveltejs/adapter-static": "*",
     "@sveltejs/kit": "*",
-    "@sveltejs/vite-plugin-svelte": "*",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "eslint": "*",
     "eslint-import-resolver-exports": "*",
     "eslint-import-resolver-node": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-svelte": "*",
-    "svelte": "*",
+    "svelte": "^4.0.0",
     "vite": "*",
     "vitest": "*"
   }

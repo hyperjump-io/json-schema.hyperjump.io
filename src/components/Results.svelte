@@ -10,7 +10,7 @@
   {#if error.output}
     Invalid
     <ul>
-      {#each error.output.errors as outputUnit}
+      {#each error.output.errors as outputUnit, index (index)}
         <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
       {/each}
     </ul>

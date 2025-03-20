@@ -2,7 +2,6 @@
   import Select from "svelte-select";
   import { onMount } from "svelte";
 
-
   let mode;
   let theme;
   const themes = [

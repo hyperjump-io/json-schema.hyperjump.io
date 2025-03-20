@@ -2,7 +2,6 @@
   import { createEventDispatcher } from "svelte";
   import Editor from "../components/Editor.svelte";
 
-
   export let ns = "";
   export let tabs = [];
   export let newTab;
@@ -37,6 +36,7 @@
 </script>
 
 <div role="tablist">
+  <!-- eslint-disable-next-line svelte/require-each-key -->
   {#each tabs as tab, ndx}
   <button role="tab" id={`${ns}-tab-${ndx}`}
        aria-selected={ndx === selected}

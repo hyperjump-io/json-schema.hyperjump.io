@@ -2,7 +2,6 @@
   import GearIcon from "./GearIcon.svelte";
   import { settings } from "../stores/settings.js";
 
-
   let isOpen = false;
 
   const toggleOpen = () => {

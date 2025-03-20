@@ -1,6 +1,5 @@
 import moo from "moo";
 
-
 const digit = `[0-9]`;
 const digit19 = `[1-9]`;
 const hexdig = `[0-9a-fA-F]`;

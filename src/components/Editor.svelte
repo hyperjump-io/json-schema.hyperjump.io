@@ -6,7 +6,6 @@
   import jsonLexer from "../lib/json-lexer.js";
   import yamlLexer from "../lib/yaml-lexer.js";
 
-
   export let value = "";
   export let format = "json";
 
@@ -45,13 +44,13 @@
 <div class="Editor">
   <div class="editor-container">
     <div class="line-numbers">
-      {#each [...Array(numberOfLines)] as _, lineNumber}
+      {#each [...Array(numberOfLines)] as _, lineNumber (lineNumber)}
       <div>{lineNumber + 1}</div>
       {/each}
     </div>
     <div class="editable">
       <pre class="highlighted">
-{#each tokens as token}
+{#each tokens as token, index (index)}
           {#if token.type === "comment"}
             <span class="comment">{token.value}</span>
           {:else if token.type === "accent1"}

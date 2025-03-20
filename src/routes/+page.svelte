@@ -20,7 +20,6 @@
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
 
-
   const DEBOUNCE_DELAY = 750;
   const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
@@ -47,7 +46,7 @@ $schema: '${defaultSchemaVersion}'`
   const setFormat = (newFormat) => () => {
     format = newFormat;
     schemas = [newSchema("Schema", schemaUrl, true)];
-    instances = [newInstance("Instance")];
+    instances = [newInstance()];
     selectedInstance = 0;
   };
 
@@ -55,8 +54,8 @@ $schema: '${defaultSchemaVersion}'`
     let sequence = 1;
 
     return (label = undefined, url = undefined, persistent = false) => {
-      const id = url || `${schemaUrl}${++sequence}`;
-      return { label: label || `Schema ${sequence}`, text: newSchemaStub[format](id), persistent: persistent };
+      const id = url ?? `${schemaUrl}${++sequence}`;
+      return { label: label ?? `Schema ${sequence}`, text: newSchemaStub[format](id), persistent: persistent };
     };
   }());
 
@@ -67,7 +66,7 @@ $schema: '${defaultSchemaVersion}'`
   }());
 
   let schemas = [newSchema("Schema", schemaUrl, true)];
-  let instances = [newInstance("Instance")];
+  let instances = [newInstance()];
   let selectedInstance = 0;
 
   const debounce = function (fn, delay) {
@@ -96,7 +95,7 @@ $schema: '${defaultSchemaVersion}'`
       const schema = YAML.parse(await response.text());
       return buildSchemaDocument(schema, response.url, contextDialectId);
     },
-    fileMatcher: (path) => path.endsWith(".schema.json")
+    fileMatcher: async (path) => path.endsWith(".schema.yaml")
   });
 
   addMediaTypePlugin("application/openapi+yaml", {
@@ -105,7 +104,7 @@ $schema: '${defaultSchemaVersion}'`
 
       let defaultDialect;
       const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
-      const version = doc.openapi || contentType.parameters.version;
+      const version = doc.openapi ?? contentType.parameters.version;
 
       if (!version) {
         throw Error("Invalid OpenAPI document. Add the 'openapi' field and try again.");
@@ -133,14 +132,14 @@ $schema: '${defaultSchemaVersion}'`
 
       return buildSchemaDocument(doc, response.url, defaultDialect);
     },
-    fileMatcher: (path) => /(\/|\.)openapi\.json$/.test(path)
+    fileMatcher: async (path) => /(\/|\.)openapi\.yaml$/.test(path)
   });
 
   $: validator = (async function () {
     const schemaDocuments = {};
     schemas.forEach((tab, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
-      const schema = parse(tab.text || "true", format);
+      const schema = parse(tab.text ?? "true", format);
       const schemaDocument = buildSchemaDocument(schema, externalId, defaultSchemaVersion);
       schemaDocuments[schemaDocument.baseUri] = schemaDocument;
 
@@ -159,7 +158,7 @@ $schema: '${defaultSchemaVersion}'`
       let v;
       try {
         v = await validator;
-      } catch (e) { /* ignore */ }
+      } catch (_error) { /* ignore */ }
 
       if (v) {
         const output = v(parse(instances[selectedInstance].text, format), BASIC);
