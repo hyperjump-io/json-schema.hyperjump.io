@@ -20,11 +20,10 @@
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
 
-  const DEBOUNCE_DELAY = 750;
   const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
-  let format = "json";
+  let format = $state("json");
 
   const parse = (src, format) => {
     if (format === "yaml") {
@@ -65,25 +64,9 @@ $schema: '${defaultSchemaVersion}'`
     return () => ({ label: `Instance ${sequence++}`, text: "" });
   }());
 
-  let schemas = [newSchema("Schema", schemaUrl, true)];
-  let instances = [newInstance()];
-  let selectedInstance = 0;
-
-  const debounce = function (fn, delay) {
-    let timer;
-    return ({ detail }) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn(detail), delay);
-    };
-  };
-
-  const updateSchemas = debounce((detail) => {
-    schemas = detail;
-  }, DEBOUNCE_DELAY);
-
-  const updateInstances = debounce((detail) => {
-    instances = detail;
-  }, DEBOUNCE_DELAY);
+  let schemas = $state([newSchema("Schema", schemaUrl, true)]);
+  let instances = $state([newInstance()]);
+  let selectedInstance = $state(0);
 
   setMetaSchemaOutputFormat(BASIC);
 
@@ -135,7 +118,7 @@ $schema: '${defaultSchemaVersion}'`
     fileMatcher: async (path) => /(\/|\.)openapi\.yaml$/.test(path)
   });
 
-  $: validator = (async function () {
+  const validator = $derived.by(async () => {
     const schemaDocuments = {};
     schemas.forEach((tab, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
@@ -151,9 +134,9 @@ $schema: '${defaultSchemaVersion}'`
     const schema = await getSchema(schemaUrl, { _cache: schemaDocuments });
     const compiled = await compile(schema);
     return (value, outputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
-  }());
+  });
 
-  $: validationResults = (async function () {
+  const validationResults = $derived.by(async () => {
     if (instances[selectedInstance].text !== "") {
       let v;
       try {
@@ -169,7 +152,7 @@ $schema: '${defaultSchemaVersion}'`
         }
       }
     }
-  }());
+  });
 </script>
 
 <svelte:head>
@@ -185,7 +168,7 @@ $schema: '${defaultSchemaVersion}'`
 
     <div class="right-controls">
       <div class="format">
-        <button class={format === "json" ? "selected" : ""} on:click={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} on:click={setFormat("yaml")}>YAML</button>
+        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
       </div>
       <Settings />
     </div>
@@ -194,22 +177,20 @@ $schema: '${defaultSchemaVersion}'`
   <div class="editor-section">
     <EditorTabs
       ns="schemas"
-      tabs={schemas}
+      bind:tabs={schemas}
+      active={selectedInstance}
       newTab={newSchema}
-      active={0}
-      bind:format={format}
-      on:input={updateSchemas}
+      format={format}
     />
   </div>
   <div class="editor-section">
     <EditorTabs
       ns="instances"
-      tabs={instances}
+      bind:tabs={instances}
       bind:selected={selectedInstance}
-      bind:active={selectedInstance}
+      active={selectedInstance}
       newTab={newInstance}
-      bind:format={format}
-      on:input={updateInstances}
+      format={format}
     />
   </div>
 

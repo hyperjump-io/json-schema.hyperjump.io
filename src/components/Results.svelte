@@ -1,5 +1,5 @@
 <script>
-  export let results;
+  let { results } = $props();
 </script>
 
 {#await results}

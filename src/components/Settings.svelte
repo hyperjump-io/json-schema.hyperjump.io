@@ -2,7 +2,7 @@
   import GearIcon from "./GearIcon.svelte";
   import { settings } from "../stores/settings.js";
 
-  let isOpen = false;
+  let isOpen = $state(false);
 
   const toggleOpen = () => {
     isOpen = !isOpen;
@@ -22,7 +22,7 @@
   </div>
   {/if}
 
-  <button type="button" class="settings-button" aria-label="Settings" on:click={toggleOpen}>
+  <button type="button" class="settings-button" aria-label="Settings" onclick={toggleOpen}>
     <GearIcon size="1.5rem" />
   </button>
 </div>

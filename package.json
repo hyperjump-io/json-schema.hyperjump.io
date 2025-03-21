@@ -25,13 +25,13 @@
     "@stylistic/eslint-plugin": "*",
     "@sveltejs/adapter-static": "*",
     "@sveltejs/kit": "*",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@sveltejs/vite-plugin-svelte": "*",
     "eslint": "*",
     "eslint-import-resolver-exports": "*",
     "eslint-import-resolver-node": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-svelte": "*",
-    "svelte": "^4.0.0",
+    "svelte": "*",
     "vite": "*",
     "vitest": "*"
   }

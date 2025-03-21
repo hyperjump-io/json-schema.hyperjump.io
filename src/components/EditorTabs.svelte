@@ -1,18 +1,19 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import Editor from "../components/Editor.svelte";
 
-  export let ns = "";
-  export let tabs = [];
-  export let newTab;
-  export let active = 0;
-  export let selected = 0;
-  export let minTabs = 1;
-  export let format = "json";
+  const DEBOUNCE_DELAY = 750;
 
-  let editor;
+  let {
+    ns = "",
+    tabs = $bindable([]),
+    newTab,
+    active = 0,
+    selected = $bindable(0),
+    minTabs = 1,
+    format = $bindable("json")
+  } = $props();
 
-  const dispatch = createEventDispatcher();
+  let editor = $state();
 
   function selectTab(id) {
     selected = id;
@@ -33,30 +34,40 @@
     tabs = tabs;
     editor.focus();
   }
+
+  const debounce = function (fn, delay) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  };
 </script>
 
 <div role="tablist">
   <!-- eslint-disable-next-line svelte/require-each-key -->
   {#each tabs as tab, ndx}
-  <button role="tab" id={`${ns}-tab-${ndx}`}
-       aria-selected={ndx === selected}
-       aria-controls={`${ns}-tabpanel`}
-       class:active={ndx === active}
-       on:click={() => selectTab(ndx)}>
-    <span class="tab-label">{tab.label}</span>
+  <div class="tab">
+    <button role="tab" id={`${ns}-tab-${ndx}`}
+         aria-selected={ndx === selected}
+         aria-controls={`${ns}-tabpanel`}
+         class:active={ndx === active}
+         onclick={() => selectTab(ndx)}>
+      <span class="tab-label">{tab.label}</span>
+    </button>
     {#if !tab.persistent && tabs.length > minTabs}
-    <button class="tab-close" on:click={() => removeTab(ndx)}>&times;</button>
+    <button class="tab-close" onclick={() => removeTab(ndx)}>&times;</button>
     {/if}
-  </button>
+  </div>
   {/each}
   {#if newTab}
-  <button role="tab" id={`${ns}-tab-${tabs.length}`} on:click={addTab}>
+  <button role="tab" id={`${ns}-tab-${tabs.length}`} class="tab" onclick={addTab}>
     <span class="tab-label">+</span>
   </button>
   {/if}
 </div>
 <div role="tabpanel" id={`${ns}-tabpanel`} aria-labelledby={`${ns}-tab-${selected}`}>
-  <Editor bind:this={editor} bind:value={tabs[selected].text} bind:format={format} on:input={() => dispatch("input", tabs)} />
+  <Editor bind:this={editor} value={tabs[selected].text} bind:format={format} oninput={debounce((value) => tabs[selected].text = value, DEBOUNCE_DELAY)} />
 </div>
 
 <style>
@@ -81,14 +92,17 @@
     border-bottom: var(--editor-border);
   }
 
-  [role=tab] {
-    position: relative;
-    display: inline-block;
+  .tab {
     border: var(--editor-border);
     border-radius: .5em .5em 0 0;
   }
 
-  [role=tab][aria-selected=true] {
+  [role=tab] {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tab:has([role=tab][aria-selected=true]) {
     border-bottom: none;
   }
 
@@ -102,7 +116,7 @@
     cursor: pointer;
   }
 
-  [role=tab] .tab-close {
+  .tab-close {
     display: inline-block;
     padding: .25em .25em .25em 0;
     cursor: pointer;

@@ -6,18 +6,21 @@
   import jsonLexer from "../lib/json-lexer.js";
   import yamlLexer from "../lib/yaml-lexer.js";
 
-  export let value = "";
-  export let format = "json";
+  let {
+    value = $bindable(""),
+    format = "json",
+    oninput
+  } = $props();
 
-  let src;
+  let src = $state();
 
   export const focus = () => {
     src.focus();
   };
 
-  $: numberOfLines = (value.match(/\n/g) || []).length + 1;
+  let numberOfLines = $derived((value.match(/\n/g) || []).length + 1);
 
-  $: tokens = (function () {
+  let tokens = $derived.by(() => {
     if (format === "json") {
       jsonLexer.reset(value);
       return Array.from(jsonLexer);
@@ -27,7 +30,7 @@
     } else {
       throw Error(`Unsupported format: ${format}`);
     }
-  }());
+  });
 
   const formatCode = () => {
     if (format === "json") {
@@ -49,35 +52,35 @@
       {/each}
     </div>
     <div class="editable">
-      <pre class="highlighted">
-{#each tokens as token, index (index)}
-          {#if token.type === "comment"}
-            <span class="comment">{token.value}</span>
-          {:else if token.type === "accent1"}
-            <span class="accent1">{token.value}</span>
-          {:else if token.type === "accent2"}
-            <span class="accent2">{token.value}</span>
-          {:else if token.type === "accent3"}
-            <span class="accent3">{token.value}</span>
-          {:else if token.type === "accent4"}
-            <span class="accent4">{token.value}</span>
-          {:else if token.type === "accent5"}
-            <span class="accent5">{token.value}</span>
-          {:else if token.type === "accent6"}
-            <span class="accent6">{token.value}</span>
-          {:else if token.type === "accent7"}
-            <span class="accent7">{token.value}</span>
-          {:else if token.type === "accent8"}
-            <span class="accent8">{token.value}</span>
-          {:else}
-            {token.value}
-          {/if}
-        {/each}
-      </pre>
-      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} on:input></textarea>
+      <pre class="highlighted"><!--
+     -->{#each tokens as token, index (index)}<!--
+       -->{#if token.type === "comment"}<!--
+         --><span class="comment">{token.value}</span><!--
+       -->{:else if token.type === "accent1"}<!--
+         --><span class="accent1">{token.value}</span><!--
+       -->{:else if token.type === "accent2"}<!--
+         --><span class="accent2">{token.value}</span><!--
+       -->{:else if token.type === "accent3"}<!--
+         --><span class="accent3">{token.value}</span><!--
+       -->{:else if token.type === "accent4"}<!--
+         --><span class="accent4">{token.value}</span><!--
+       -->{:else if token.type === "accent5"}<!--
+         --><span class="accent5">{token.value}</span><!--
+       -->{:else if token.type === "accent6"}<!--
+         --><span class="accent6">{token.value}</span><!--
+       -->{:else if token.type === "accent7"}<!--
+         --><span class="accent7">{token.value}</span><!--
+       -->{:else if token.type === "accent8"}<!--
+         --><span class="accent8">{token.value}</span><!--
+       -->{:else}<!--
+         -->{token.value}<!--
+       -->{/if}<!--
+     -->{/each}<!--
+   --></pre>
+      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} oninput={({ target: { value } }) => oninput(value)}></textarea>
     </div>
   </div>
-  <button class="formatter" type="button" title="Format Code" on:click={() => formatCode()}><FormatterIcon /></button>
+  <button class="formatter" type="button" title="Format Code" onclick={() => formatCode()}><FormatterIcon /></button>
 </div>
 
 <style>

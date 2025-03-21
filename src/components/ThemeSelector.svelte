@@ -2,8 +2,8 @@
   import Select from "svelte-select";
   import { onMount } from "svelte";
 
-  let mode;
-  let theme;
+  let mode = $state();
+  let theme = $state();
   const themes = [
     { value: "solarized", label: "Solarized" },
     { value: "atom-one", label: "Atom One" }
@@ -39,7 +39,7 @@
 
 <div class="ThemeSelector">
   {#if mode}
-  <button class="dark-mode-toggle" on:click={toggleMode}>
+  <button class="dark-mode-toggle" onclick={toggleMode}>
     {#if mode === "dark"}
       <svg viewBox="0 0 122.88 122.89">
         <title>Dark Mode</title>
