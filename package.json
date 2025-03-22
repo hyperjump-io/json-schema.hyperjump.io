@@ -7,6 +7,9 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "prepare": "svelte-kit sync || echo ''",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest --watch=false",
     "lint": "eslint ."
   },
@@ -26,12 +29,15 @@
     "@sveltejs/adapter-static": "*",
     "@sveltejs/kit": "*",
     "@sveltejs/vite-plugin-svelte": "*",
-    "eslint": "*",
-    "eslint-import-resolver-exports": "*",
-    "eslint-import-resolver-node": "*",
+    "@types/content-type": "^1.1.8",
+    "@types/moo": "^0.5.10",
+    "eslint-import-resolver-typescript": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-svelte": "*",
     "svelte": "*",
+    "svelte-check": "*",
+    "typescript-eslint": "*",
+    "undici": "^7.5.0",
     "vite": "*",
     "vitest": "*"
   }

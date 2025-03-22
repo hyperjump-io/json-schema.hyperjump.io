@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import lexer from "./yaml-lexer.js";
+import lexer from "./yaml-lexer.ts";
 
 describe("YAML Lexer", () => {
   test("true", () => {

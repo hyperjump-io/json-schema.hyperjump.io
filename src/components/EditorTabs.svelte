@@ -1,45 +1,63 @@
-<script>
-  import Editor from "../components/Editor.svelte";
+<script lang="ts">
+  import Editor from "./Editor.svelte";
 
-  const DEBOUNCE_DELAY = 750;
+  import type { Tab } from "./EditorTabs.d.ts";
+
+  type Props = {
+    ns?: string;
+    tabs?: Tab[];
+    format?: "json" | "yaml";
+    newTab?: () => Tab;
+    active?: number;
+    selected?: number;
+    minTabs?: number;
+  };
 
   let {
     ns = "",
     tabs = $bindable([]),
+    format = "json",
     newTab,
     active = 0,
     selected = $bindable(0),
-    minTabs = 1,
-    format = $bindable("json")
-  } = $props();
+    minTabs = 1
+  }: Props = $props();
 
-  let editor = $state();
+  const DEBOUNCE_DELAY = 750;
 
-  function selectTab(id) {
+  let editor: Editor | undefined = $state();
+
+  const selectTab = (id: number) => {
     selected = id;
-    editor.focus();
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    editor!.focus();
+  };
 
-  function addTab() {
-    tabs[tabs.length] = newTab();
+  const addTab = () => {
+    tabs[tabs.length] = newTab!();
     selected = tabs.length - 1;
-    editor.focus();
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    editor!.focus();
+  };
 
-  function removeTab(id) {
+  const removeTab = (id: number) => {
     if (selected >= id && selected > 0) {
       selected -= 1;
     }
     tabs.splice(id, 1);
     tabs = tabs;
-    editor.focus();
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    editor!.focus();
+  };
 
-  const debounce = function (fn, delay) {
-    let timer;
-    return (...args) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const debounce = <Fn extends (...args: any[]) => any>(fn: Fn, delay: number) => {
+    let timer: number;
+    return (...args: Parameters<Fn>) => {
       clearTimeout(timer);
-      timer = setTimeout(() => fn(...args), delay);
+      timer = setTimeout(() => {
+        fn(...args);
+      }, delay);
     };
   };
 </script>
@@ -67,7 +85,7 @@
   {/if}
 </div>
 <div role="tabpanel" id={`${ns}-tabpanel`} aria-labelledby={`${ns}-tab-${selected}`}>
-  <Editor bind:this={editor} value={tabs[selected].text} bind:format={format} oninput={debounce((value) => tabs[selected].text = value, DEBOUNCE_DELAY)} />
+  <Editor bind:this={editor} value={tabs[selected].text} format={format} oninput={debounce((value: string) => tabs[selected].text = value, DEBOUNCE_DELAY)} />
 </div>
 
 <style>

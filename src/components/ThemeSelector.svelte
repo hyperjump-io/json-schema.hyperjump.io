@@ -1,17 +1,18 @@
-<script>
+<script lang="ts">
   import Select from "svelte-select";
   import { onMount } from "svelte";
 
-  let mode = $state();
-  let theme = $state();
+  let mode: string | undefined = $state();
+  let theme: string | undefined = $state();
+
   const themes = [
     { value: "solarized", label: "Solarized" },
     { value: "atom-one", label: "Atom One" }
   ];
 
-  onMount(async () => {
-    mode = localStorage.mode || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    theme = localStorage.theme || "solarized";
+  onMount(() => {
+    mode = localStorage.getItem("mode") ?? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    theme = localStorage.getItem("theme") ?? "solarized";
 
     // Listen for default mode changes
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
@@ -26,14 +27,16 @@
     mode = mode === "dark" ? "light" : "dark";
     localStorage.mode = mode;
 
-    document.getElementById("theme").href = `${theme.value}-${mode}.css`;
+    const element = document.getElementById("theme") as HTMLAnchorElement;
+    element.href = `${theme}-${mode}.css`;
   };
 
-  const setTheme = (event) => {
+  const setTheme = (event: CustomEvent<{ value: string }>) => {
     theme = event.detail.value;
     localStorage.theme = theme;
 
-    document.getElementById("theme").href = `${theme}-${mode}.css`;
+    const element = document.getElementById("theme") as HTMLAnchorElement;
+    element.href = `${theme}-${mode}.css`;
   };
 </script>
 

@@ -39,7 +39,7 @@ export default moo.states({
     comma: [","],
     accent3: ["{", "}", "[", "]", ":"],
     accent1: new RegExp(arrayItemMarker),
-    accent7: { match: [new RegExp(string), new RegExp(number), "true", "false", "null"] },
+    accent7: { match: new RegExp(`${string}|${number}|true|false|null`) },
     accent6: { match: new RegExp(property) },
     comment: new RegExp(comment),
     other: new RegExp(other)

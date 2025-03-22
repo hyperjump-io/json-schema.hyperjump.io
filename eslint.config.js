@@ -1,14 +1,25 @@
-import { defineConfig } from "eslint/config";
-import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+// @ts-expect-error No types available
 import importPlugin from "eslint-plugin-import";
 import stylistic from "@stylistic/eslint-plugin";
-import globals from "globals";
 import svelte from "eslint-plugin-svelte";
 import svelteConfig from "./svelte.config.js";
 
-export default defineConfig([
-  js.configs.recommended,
-  importPlugin.flatConfigs.recommended,
+export default tseslint.config([
+  { ignores: [".svelte-kit/", "build/"] },
+
+  // TypeScript
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true
+      }
+    }
+  },
+
+  // Stylistic
+  ...tseslint.configs.stylisticTypeChecked,
   stylistic.configs.customize({
     arrowParens: true,
     braceStyle: "1tbs",
@@ -17,44 +28,49 @@ export default defineConfig([
     quotes: "double",
     semi: true
   }),
+
+  // Import
+  importPlugin.flatConfigs.recommended, // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+  importPlugin.flatConfigs.typescript, // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+  {
+    settings: {
+      "import/resolver": {
+        typescript: {}
+      },
+      "import/parsers": {
+        "@typescript-eslint/parser": [".js", ".mjs", ".cjs", ".ts"]
+      }
+    }
+  },
+
+  // Svelte
   ...svelte.configs.recommended,
   {
-    files: ["**/*.svelte", "**/*.svelte.js"],
+    files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
     languageOptions: {
       parserOptions: {
-        projectService: true,
         extraFileExtensions: [".svelte"],
+        parser: tseslint.parser,
         svelteConfig
       }
     }
   },
-  { ignores: [".svelte-kit/", "build/"] },
-  {
-    languageOptions: {
-      ecmaVersion: "latest",
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      }
-    },
-    settings: {
-      "import/resolver": {
-        node: {},
-        exports: {}
-      },
-      "import/parsers": {
-        espree: [".js"]
-      }
-    }
-  },
+
+  // Rules
   {
     rules: {
-      "no-unused-vars": ["error", {
+      // TypeScript
+      "@typescript-eslint/no-unused-vars": ["error", {
         argsIgnorePattern: "^_",
         varsIgnorePattern: "^_",
         caughtErrorsIgnorePattern: "^_"
       }],
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/consistent-type-definitions": "off",
       "no-console": "error",
+
+      // Import
+      "import/no-named-as-default-member": "off",
 
       // Stylistic
       "@stylistic/yield-star-spacing": ["error", "after"],

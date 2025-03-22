@@ -1,24 +1,30 @@
-<script>
+<script lang="ts">
   import { format as jsoncFormat, applyEdits } from "jsonc-parser";
-  import YAML from "yaml";
+  import * as YAML from "yaml";
   import { settings } from "../stores/settings.js";
   import FormatterIcon from "./FormatterIcon.svelte";
   import jsonLexer from "../lib/json-lexer.js";
   import yamlLexer from "../lib/yaml-lexer.js";
 
+  type Props = {
+    value?: string;
+    format?: "json" | "yaml";
+    oninput?: (value: string) => void;
+  };
+
   let {
     value = $bindable(""),
     format = "json",
-    oninput
-  } = $props();
+    oninput = () => {}
+  }: Props = $props();
 
-  let src = $state();
+  let src: HTMLTextAreaElement | undefined = $state();
 
   export const focus = () => {
-    src.focus();
+    src!.focus();
   };
 
-  let numberOfLines = $derived((value.match(/\n/g) || []).length + 1);
+  let numberOfLines = $derived((value.match(/\n/g) ?? []).length + 1);
 
   let tokens = $derived.by(() => {
     if (format === "json") {
@@ -28,7 +34,7 @@
       yamlLexer.reset(value);
       return Array.from(yamlLexer);
     } else {
-      throw Error(`Unsupported format: ${format}`);
+      throw Error("Unsupported format");
     }
   });
 
@@ -39,7 +45,7 @@
     } else if (format === "yaml") {
       value = YAML.stringify(YAML.parse(value), null, " ".repeat($settings.indentSize));
     } else {
-      throw Error(`Unsupported format: ${format}`);
+      throw Error("Unsupported format");
     }
   };
 </script>
@@ -47,7 +53,7 @@
 <div class="Editor">
   <div class="editor-container">
     <div class="line-numbers">
-      {#each [...Array(numberOfLines)] as _, lineNumber (lineNumber)}
+      {#each [...Array(numberOfLines)] as _, lineNumber (lineNumber)}<!-- eslint-disable-line @typescript-eslint/no-unsafe-assignment -->
       <div>{lineNumber + 1}</div>
       {/each}
     </div>
@@ -77,7 +83,7 @@
        -->{/if}<!--
      -->{/each}<!--
    --></pre>
-      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} oninput={({ target: { value } }) => oninput(value)}></textarea>
+      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} oninput={(event) => { oninput(event.currentTarget.value); }}></textarea>
     </div>
   </div>
   <button class="formatter" type="button" title="Format Code" onclick={() => formatCode()}><FormatterIcon /></button>

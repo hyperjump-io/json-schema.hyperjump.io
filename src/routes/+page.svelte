@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
   import contentTypeParser from "content-type";
-  import YAML from "yaml";
+  import * as YAML from "yaml";
 
   import { setMetaSchemaOutputFormat } from "@hyperjump/json-schema";
   import { addMediaTypePlugin } from "@hyperjump/browser";
@@ -20,20 +20,26 @@
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
 
+  import type { Browser } from "@hyperjump/browser";
+  import type { OutputFormat, SchemaObject } from "@hyperjump/json-schema";
+  import type { SchemaDocument } from "@hyperjump/json-schema/experimental";
+  import type { Json } from "@hyperjump/json-pointer";
+  import type { Tab } from "../components/EditorTabs.d.ts";
+
   const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
-  let format = $state("json");
+  let format: "json" | "yaml" = $state("json");
 
-  const parse = (src, format) => {
+  const parse = (src: string, format: string): Json => {
     if (format === "yaml") {
-      return YAML.parse(src);
+      return YAML.parse(src) as Json;
     } else {
-      return JSON.parse(src);
+      return JSON.parse(src) as Json;
     }
   };
 
-  const newSchemaStub = {
+  const newSchemaStub: Record<string, (id: string) => string> = {
     json: (id) => `{
   "$id": "${id}",
   "$schema": "${defaultSchemaVersion}"
@@ -42,7 +48,7 @@
 $schema: '${defaultSchemaVersion}'`
   };
 
-  const setFormat = (newFormat) => () => {
+  const setFormat = (newFormat: "json" | "yaml") => () => {
     format = newFormat;
     schemas = [newSchema("Schema", schemaUrl, true)];
     instances = [newInstance()];
@@ -52,9 +58,13 @@ $schema: '${defaultSchemaVersion}'`
   const newSchema = (function () {
     let sequence = 1;
 
-    return (label = undefined, url = undefined, persistent = false) => {
+    return (label?: string, url?: string, persistent = false): Tab => {
       const id = url ?? `${schemaUrl}${++sequence}`;
-      return { label: label ?? `Schema ${sequence}`, text: newSchemaStub[format](id), persistent: persistent };
+      return {
+        label: label ?? `Schema ${sequence}`,
+        text: newSchemaStub[format](id),
+        persistent: persistent
+      };
     };
   }());
 
@@ -64,8 +74,8 @@ $schema: '${defaultSchemaVersion}'`
     return () => ({ label: `Instance ${sequence++}`, text: "" });
   }());
 
-  let schemas = $state([newSchema("Schema", schemaUrl, true)]);
-  let instances = $state([newInstance()]);
+  let schemas: Tab[] = $state([newSchema("Schema", schemaUrl, true)]);
+  let instances: Tab[] = $state([newInstance()]);
   let selectedInstance = $state(0);
 
   setMetaSchemaOutputFormat(BASIC);
@@ -75,15 +85,21 @@ $schema: '${defaultSchemaVersion}'`
       const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
       const contextDialectId = contentType.parameters.schema ?? contentType.parameters.profile;
 
-      const schema = YAML.parse(await response.text());
+      const schema = YAML.parse(await response.text()) as SchemaObject;
       return buildSchemaDocument(schema, response.url, contextDialectId);
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     fileMatcher: async (path) => path.endsWith(".schema.yaml")
   });
 
+  type OpenApi = {
+    openapi: string;
+    jsonSchemaDialect: string;
+  };
+
   addMediaTypePlugin("application/openapi+yaml", {
     parse: async (response) => {
-      const doc = await response.json();
+      const doc = await response.json() as OpenApi;
 
       let defaultDialect;
       const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
@@ -115,15 +131,16 @@ $schema: '${defaultSchemaVersion}'`
 
       return buildSchemaDocument(doc, response.url, defaultDialect);
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     fileMatcher: async (path) => /(\/|\.)openapi\.yaml$/.test(path)
   });
 
   const validator = $derived.by(async () => {
-    const schemaDocuments = {};
+    const schemaDocuments: Record<string, SchemaDocument> = {};
     schemas.forEach((tab, ndx) => {
       const externalId = ndx === 0 ? schemaUrl : "";
       const schema = parse(tab.text ?? "true", format);
-      const schemaDocument = buildSchemaDocument(schema, externalId, defaultSchemaVersion);
+      const schemaDocument = buildSchemaDocument(schema as SchemaObject, externalId, defaultSchemaVersion);
       schemaDocuments[schemaDocument.baseUri] = schemaDocument;
 
       if (externalId) {
@@ -131,9 +148,11 @@ $schema: '${defaultSchemaVersion}'`
       }
     });
 
-    const schema = await getSchema(schemaUrl, { _cache: schemaDocuments });
+    // @ts-expect-error Ignore my hack
+    const browser: Browser = { _cache: schemaDocuments };
+    const schema = await getSchema(schemaUrl, browser);
     const compiled = await compile(schema);
-    return (value, outputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
+    return (value: Json, outputFormat: OutputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
   });
 
   const validationResults = $derived.by(async () => {
@@ -148,6 +167,7 @@ $schema: '${defaultSchemaVersion}'`
         if (output.valid) {
           return output;
         } else {
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
           throw { output };
         }
       }
@@ -178,7 +198,7 @@ $schema: '${defaultSchemaVersion}'`
     <EditorTabs
       ns="schemas"
       bind:tabs={schemas}
-      active={selectedInstance}
+      active={0}
       newTab={newSchema}
       format={format}
     />

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import GitHubLink from "./GitHubLink.svelte";
   import NpmLink from "./NpmLink.svelte";
   import JsonSchemaLink from "./JsonSchemaLink.svelte";

@@ -1,0 +1,17 @@
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+  "include": ["./eslint.config.js", "./svelte.config.js", "./vite.config.js", "./src/"],
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+		"sourceMap": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+  }
+}

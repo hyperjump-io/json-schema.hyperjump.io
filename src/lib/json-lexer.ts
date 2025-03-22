@@ -30,12 +30,12 @@ export default moo.states({
   },
   string: {
     accent7: { match: new RegExp(`${char}+`), lineBreaks: true },
-    stringEnd: { match: "\"", pop: true },
+    stringEnd: { match: "\"", pop: 1 },
     other: /./
   },
   property: {
     accent1: { match: new RegExp(`${char}+`), lineBreaks: true },
-    propertyEnd: { match: "\"", pop: true },
+    propertyEnd: { match: "\"", pop: 1 },
     other: /./
   }
 });

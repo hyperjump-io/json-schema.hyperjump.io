@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import GearIcon from "./GearIcon.svelte";
   import { settings } from "../stores/settings.js";
 

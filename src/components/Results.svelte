@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+  import type { OutputUnit } from "@hyperjump/json-schema";
+
   let { results } = $props();
 </script>
 
@@ -10,12 +12,12 @@
   {#if error.output}
     Invalid
     <ul>
-      {#each error.output.errors as outputUnit, index (index)}
+      {#each (error.output as OutputUnit).errors ?? [] as outputUnit, index (index)}
         <li><code>{outputUnit.instanceLocation}</code> fails schema constraint <code>{outputUnit.absoluteKeywordLocation}</code></li>
       {/each}
     </ul>
   {:else}
-    {error}
+    {error.message}
   {/if}
 {/await}
 
