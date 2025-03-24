@@ -167,13 +167,15 @@ $id: '${id}'`
 
 <main>
   <div class="header">
-    <ThemeSelector />
-
     <h1>Hyperjump - JSON Schema</h1>
+  </div>
 
+  <div class="controls">
+    <ThemeSelector />
     <div class="right-controls">
       <div class="format">
-        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
+        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button>
+        <button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
       </div>
       <Settings />
     </div>
@@ -215,15 +217,17 @@ $id: '${id}'`
 
 <style>
   h1 {
-    margin: auto;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
   }
 
   main {
     display: grid;
-    grid-auto-flow: row;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr 200px auto;
-    grid-gap: .5em;
+    grid-template-rows: auto auto 1fr 200px auto;
+    gap: .5em;
     padding: .5em;
     height: 100%;
 
@@ -232,13 +236,22 @@ $id: '${id}'`
   }
 
   .header {
-    grid-column-end: span 2;
+    grid-column: 1 / -1;
+  }
+
+  .controls {
+    grid-column: 1 / -1;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5em;
   }
 
   .right-controls {
     display: flex;
     align-items: center;
+    gap: .5em;
   }
 
   .format {
