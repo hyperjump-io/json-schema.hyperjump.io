@@ -167,9 +167,11 @@ $id: '${id}'`
 
 <main>
   <div class="header">
-    <ThemeSelector />
+    <div class="left-controls">
+      <ThemeSelector />
+    </div>
 
-    <h1>Hyperjump - JSON Schema</h1>
+    <h1>Hyperjump - JSON&nbsp;Schema</h1>
 
     <div class="right-controls">
       <div class="format">
@@ -214,16 +216,11 @@ $id: '${id}'`
 </main>
 
 <style>
-  h1 {
-    margin: auto;
-  }
-
   main {
     display: grid;
-    grid-auto-flow: row;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr 200px auto;
-    grid-gap: .5em;
+    gap: .5em;
     padding: .5em;
     height: 100%;
 
@@ -232,13 +229,36 @@ $id: '${id}'`
   }
 
   .header {
-    grid-column-end: span 2;
-    display: flex;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-areas: "left title right";
+    align-items: center;
+  }
+
+  .header h1 {
+    grid-area: title;
+    margin: 0;
+    text-align: center;
+  }
+
+  .left-controls {
+    grid-area: left;
+    justify-self: start;
   }
 
   .right-controls {
+    grid-area: right;
     display: flex;
-    align-items: center;
+    justify-self: end;
+  }
+
+  /* Adjust the header for small screens */
+  @media (max-width: 750px) {
+    .header {
+      grid-template-areas:
+        "title title"
+        "left right";
+    }
   }
 
   .format {
@@ -271,8 +291,8 @@ $id: '${id}'`
   }
 
   .results {
-    border: thin solid;
+    border: var(--editor-border);
     overflow: scroll;
-    padding: .25em;
+    padding: var(--editor-padding);
   }
 </style>
