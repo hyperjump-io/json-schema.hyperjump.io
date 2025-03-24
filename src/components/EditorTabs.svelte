@@ -11,6 +11,7 @@
     active?: number;
     selected?: number;
     minTabs?: number;
+    onclose?: (index: number) => void;
   };
 
   let {
@@ -20,7 +21,8 @@
     newTab,
     active = 0,
     selected = $bindable(0),
-    minTabs = 1
+    minTabs = 1,
+    onclose
   }: Props = $props();
 
   const DEBOUNCE_DELAY = 750;
@@ -46,6 +48,7 @@
     }
     tabs.splice(id, 1);
     tabs = tabs;
+    onclose?.(id);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     editor!.focus();
   };
