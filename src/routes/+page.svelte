@@ -18,7 +18,12 @@
   import Footer from "../components/Footer.svelte";
 
   import type { Browser } from "@hyperjump/browser";
-  import type { OutputFormat, OutputUnit, SchemaObject, Validator } from "@hyperjump/json-schema";
+  import type {
+    OutputFormat,
+    OutputUnit,
+    SchemaObject,
+    Validator
+  } from "@hyperjump/json-schema";
   import type { SchemaDocument } from "@hyperjump/json-schema/experimental";
   import type { Json } from "@hyperjump/json-pointer";
   import type { Tab } from "../components/EditorTabs.d.ts";
@@ -39,7 +44,7 @@
         persistent: persistent
       };
     };
-  }());
+  })();
 
   const newSchemaStub: Record<string, (id: string) => string> = {
     json: (id) => `{
@@ -54,7 +59,7 @@ $id: '${id}'`
     let sequence = 1;
 
     return () => ({ label: `Instance ${sequence++}`, text: "" });
-  }());
+  })();
 
   let schemas: Tab[] = $state([newSchema("Schema", schemaUrl, true)]);
   let selectedSchema = $state(0);
@@ -72,42 +77,47 @@ $id: '${id}'`
     schemaDocuments[selectedSchema] = (async function () {
       const externalId = selectedSchema === 0 ? schemaUrl : "";
       const schema = parse(schemas[selectedSchema].text ?? "true", format);
-      return buildSchemaDocument(schema as SchemaObject, externalId, defaultSchemaVersion);
-    }());
+      return buildSchemaDocument(
+        schema as SchemaObject,
+        externalId,
+        defaultSchemaVersion
+      );
+    })();
 
     const browser = (async function () {
       const schemaRegistry: Record<string, SchemaDocument> = {};
       try {
         schemaRegistry[schemaUrl] = await schemaDocuments[0];
-      } catch (_error) {
-      }
+      } catch (_error) {}
       for (const schemaDocument of schemaDocuments) {
         try {
           schemaRegistry[(await schemaDocument).baseUri] = await schemaDocument;
-        } catch (_error) {
-        }
+        } catch (_error) {}
       }
 
       // @ts-expect-error Ignore my hack
       return { _cache: schemaRegistry } as Browser;
-    }());
+    })();
 
     compileResults = (async function () {
-      const schema = await getSchema((await schemaDocuments[selectedSchema]).baseUri, await browser);
+      const schema = await getSchema(
+        (await schemaDocuments[selectedSchema]).baseUri,
+        await browser
+      );
       await compile(schema);
       return { valid: true } as OutputUnit;
-    }());
+    })();
 
     validator = (async function () {
       try {
         if (await schemaDocuments[0]) {
           const schema = await getSchema(schemaUrl, await browser);
           const compiled = await compile(schema);
-          return (value: Json, outputFormat?: OutputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
+          return (value: Json, outputFormat?: OutputFormat) =>
+            interpret(compiled, Instance.fromJs(value), outputFormat);
         }
-      } catch (_error) {
-      }
-    }());
+      } catch (_error) {}
+    })();
   });
 
   const onSchemaTabClose = (index: number) => {
@@ -117,8 +127,12 @@ $id: '${id}'`
       schemaDocuments[index] = (async function () {
         const externalId = selectedSchema === 0 ? schemaUrl : "";
         const schema = parse(tab.text ?? "true", format);
-        return buildSchemaDocument(schema as SchemaObject, externalId, defaultSchemaVersion);
-      }());
+        return buildSchemaDocument(
+          schema as SchemaObject,
+          externalId,
+          defaultSchemaVersion
+        );
+      })();
     });
 
     if (selectedSchema !== index) {
@@ -134,7 +148,10 @@ $id: '${id}'`
       let v = await validator;
 
       if (v) {
-        const output = v(parse(instances[selectedInstance].text, format), BASIC);
+        const output = v(
+          parse(instances[selectedInstance].text, format),
+          BASIC
+        );
         if (output.valid) {
           return output;
         } else {
@@ -167,15 +184,22 @@ $id: '${id}'`
 
 <main>
   <div class="header">
-    <h1>Hyperjump - JSON Schema</h1>
-  </div>
+    <div class="left-controls">
+      <ThemeSelector />
+    </div>
 
-  <div class="controls">
-    <ThemeSelector />
+    <h1>Hyperjump - JSON Schema</h1>
+
     <div class="right-controls">
       <div class="format">
-        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button>
-        <button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
+        <button
+          class={format === "json" ? "selected" : ""}
+          on:click={setFormat("json")}>JSON</button
+        >
+        <button
+          class={format === "yaml" ? "selected" : ""}
+          on:click={setFormat("yaml")}>YAML</button
+        >
       </div>
       <Settings />
     </div>
@@ -188,7 +212,7 @@ $id: '${id}'`
       bind:selected={selectedSchema}
       active={0}
       newTab={newSchema}
-      format={format}
+      {format}
       onclose={onSchemaTabClose}
     />
   </div>
@@ -199,7 +223,7 @@ $id: '${id}'`
       bind:selected={selectedInstance}
       active={selectedInstance}
       newTab={newInstance}
-      format={format}
+      {format}
     />
   </div>
 
@@ -216,42 +240,41 @@ $id: '${id}'`
 </main>
 
 <style>
-  h1 {
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    margin: 0;
-    text-align: center;
-    white-space: nowrap;
-  }
-
   main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr 200px auto;
-    gap: .5em;
-    padding: .5em;
+    grid-template-rows: auto 1fr 200px auto;
+    gap: 0.5em;
+    padding: 0.5em;
     height: 100%;
 
-    --editor-padding: .25em;
+    --editor-padding: 0.25em;
     --editor-border: thin solid;
   }
 
   .header {
     grid-column: 1 / -1;
-  }
-
-  .controls {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "left title right";
     align-items: center;
-    flex-wrap: wrap;
-    gap: .5em;
+    gap: 1em;
   }
 
+  .header h1 {
+    justify-self: center;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .left-controls,
   .right-controls {
     display: flex;
     align-items: center;
-    gap: .5em;
+    gap: 0.5em;
   }
 
   .format {
@@ -261,11 +284,11 @@ $id: '${id}'`
   }
 
   .format :first-child {
-    border-radius: .25em 0 0 .25em;
+    border-radius: 0.25em 0 0 0.25em;
   }
 
   .format :last-child {
-    border-radius: 0 .25em .25em 0;
+    border-radius: 0 0.25em 0.25em 0;
   }
 
   .format button:hover {
@@ -284,8 +307,34 @@ $id: '${id}'`
   }
 
   .results {
-    border: thin solid;
+    border: var(--editor-border);
     overflow: scroll;
-    padding: .25em;
+    padding: var(--editor-padding);
+  }
+
+  @media (max-width: 640px) {
+    .header {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "title title"
+        "left right";
+      align-items: center;
+    }
+
+    .header h1 {
+      grid-area: title;
+      justify-self: center;
+    }
+
+    .left-controls {
+      grid-area: left;
+      justify-content: start;
+    }
+
+    .right-controls {
+      grid-area: right;
+      justify-content: end;
+    }
   }
 </style>
