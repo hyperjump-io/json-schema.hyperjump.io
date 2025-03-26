@@ -220,11 +220,11 @@ $id: '${id}'`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr 200px auto;
-    gap: 0.5em;
-    padding: 0.5em;
+    gap: .5em;
+    padding: .5em;
     height: 100%;
 
-    --editor-padding: 0.25em;
+    --editor-padding: .25em;
     --editor-border: thin solid;
   }
 
@@ -250,7 +250,7 @@ $id: '${id}'`
   .right-controls {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: .5em;
   }
 
   .format {
@@ -260,11 +260,11 @@ $id: '${id}'`
   }
 
   .format :first-child {
-    border-radius: 0.25em 0 0 0.25em;
+    border-radius: .25em 0 0 .25em;
   }
 
   .format :last-child {
-    border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 .25em .25em 0;
   }
 
   .format button:hover {
