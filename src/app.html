@@ -25,7 +25,7 @@
       // Load theme/mode early enough to not flicker
       const defaultMode = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       const mode = localStorage.getItem("mode") || defaultMode;
-      const theme = localStorage.getItem("theme") || "solarized";
+      const theme = localStorage.getItem("theme") || "atom-one";
 
       const themeLink = document.createElement("link");
       themeLink.id = "theme";

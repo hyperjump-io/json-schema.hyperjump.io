@@ -2,21 +2,26 @@
   import Select from "svelte-select";
   import { onMount } from "svelte";
 
-  let mode: string | undefined = $state();
-  let theme: string | undefined = $state();
+  type SelectOption = {
+    value: string;
+    label?: string;
+  };
 
-  const themes = [
+  let mode: string | undefined = $state();
+  let selectedTheme: SelectOption | undefined = $state();
+
+  const themes: SelectOption[] = [
     { value: "solarized", label: "Solarized" },
     { value: "atom-one", label: "Atom One" }
   ];
 
   onMount(() => {
     mode = localStorage.getItem("mode") ?? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    theme = localStorage.getItem("theme") ?? "solarized";
+    selectedTheme = { value: localStorage.getItem("theme") ?? "atom-one" };
 
     // Listen for default mode changes
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-      if (localStorage.mode) {
+      if (localStorage.getItem("mode")) {
         return;
       }
       mode = event.matches ? "dark" : "light";
@@ -25,18 +30,18 @@
 
   const toggleMode = () => {
     mode = mode === "dark" ? "light" : "dark";
-    localStorage.mode = mode;
+    localStorage.setItem("mode", mode);
 
     const element = document.getElementById("theme") as HTMLAnchorElement;
-    element.href = `${theme}-${mode}.css`;
+    element.href = `${selectedTheme!.value}-${mode}.css`;
   };
 
-  const setTheme = (event: CustomEvent<{ value: string }>) => {
-    theme = event.detail.value;
-    localStorage.theme = theme;
+  const setTheme = (event: CustomEvent<SelectOption>) => {
+    selectedTheme = event.detail;
+    localStorage.setItem("theme", selectedTheme.value);
 
     const element = document.getElementById("theme") as HTMLAnchorElement;
-    element.href = `${theme}-${mode}.css`;
+    element.href = `${selectedTheme.value}-${mode}.css`;
   };
 </script>
 
@@ -59,9 +64,9 @@
   </button>
   {/if}
 
-  {#if theme}
+  {#if selectedTheme}
   <Select class="theme-selector"
-          bind:value={theme}
+          bind:value={selectedTheme}
           on:change={setTheme}
           items={themes}
           showChevron

@@ -19,6 +19,6 @@ if (browser) { // This guard is only needed for development
   settings = writable(settingsJson ? JSON.parse(settingsJson) : defaultSettings) as Writable<Settings>;
 
   settings.subscribe((value) => {
-    localStorage.settings = JSON.stringify(value);
+    localStorage.setItem("settings", JSON.stringify(value));
   });
 }
