@@ -231,26 +231,32 @@ $id: '${id}'`
   .header {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: auto 1fr auto;
     grid-template-areas: "left title right";
     align-items: center;
-    gap: 1em;
   }
 
   .header h1 {
+    grid-area: title;
     justify-self: center;
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-size: 2rem;
     margin: 0;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  .left-controls,
-  .right-controls {
+  .left-controls {
+    grid-area: left;
     display: flex;
     align-items: center;
     gap: .5em;
+    justify-content: start;
+  }
+
+  .right-controls {
+    grid-area: right;
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    justify-content: end;
   }
 
   .format {
@@ -291,26 +297,10 @@ $id: '${id}'`
   @media (max-width: 640px) {
     .header {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
       grid-template-areas:
         "title title"
         "left right";
       align-items: center;
-    }
-
-    .header h1 {
-      grid-area: title;
-      justify-self: center;
-    }
-
-    .left-controls {
-      grid-area: left;
-      justify-content: start;
-    }
-
-    .right-controls {
-      grid-area: right;
-      justify-content: end;
     }
   }
 </style>
