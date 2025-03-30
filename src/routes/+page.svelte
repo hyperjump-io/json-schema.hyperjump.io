@@ -231,6 +231,7 @@ $id: '${id}'`
   .header {
     grid-column: 1 / -1;
     display: grid;
+    grid-template-columns: 1fr auto 1fr;
     grid-template-areas: "left title right";
     align-items: center;
   }
@@ -255,6 +256,7 @@ $id: '${id}'`
   /* Adjust the header for small screens */
   @media (max-width: 750px) {
     .header {
+      grid-template-columns: 1fr 1fr;
       grid-template-areas:
         "title title"
         "left right";
