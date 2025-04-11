@@ -28,10 +28,10 @@
 
   let tokens = $derived.by(() => {
     if (format === "json") {
-      jsonLexer.reset(value);
+      jsonLexer.reset(value + "\n");
       return Array.from(jsonLexer);
     } else if (format === "yaml") {
-      yamlLexer.reset(value);
+      yamlLexer.reset(value + "\n");
       return Array.from(yamlLexer);
     } else {
       throw Error("Unsupported format");
