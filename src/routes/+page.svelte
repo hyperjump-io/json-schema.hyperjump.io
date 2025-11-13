@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as YAML from "yaml";
+  import * as YAML from "js-yaml";
 
   import {} from "$lib/json-schema.ts";
   import {
@@ -147,7 +147,7 @@ $id: '${id}'`
 
   const parse = (src: string, format: string): Json => {
     if (format === "yaml") {
-      return YAML.parse(src) as Json;
+      return YAML.load(src) as Json;
     } else {
       return JSON.parse(src) as Json;
     }

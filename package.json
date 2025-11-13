@@ -19,25 +19,26 @@
     "@hyperjump/browser": "*",
     "@hyperjump/json-schema": "*",
     "content-type": "*",
+    "js-yaml": "*",
     "jsonc-parser": "*",
     "moo": "*",
-    "svelte-select": "*",
-    "yaml": "*"
+    "svelte-select": "*"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "*",
     "@sveltejs/adapter-static": "*",
     "@sveltejs/kit": "*",
     "@sveltejs/vite-plugin-svelte": "*",
-    "@types/content-type": "^1.1.8",
-    "@types/moo": "^0.5.10",
+    "@types/content-type": "*",
+    "@types/js-yaml": "*",
+    "@types/moo": "*",
     "eslint-import-resolver-typescript": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-svelte": "*",
     "svelte": "*",
     "svelte-check": "*",
     "typescript-eslint": "*",
-    "undici": "^7.5.0",
+    "undici": "*",
     "vite": "*",
     "vitest": "*"
   }

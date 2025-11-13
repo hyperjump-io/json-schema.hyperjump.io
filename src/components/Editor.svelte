@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format as jsoncFormat, applyEdits } from "jsonc-parser";
-  import * as YAML from "yaml";
+  import * as YAML from "js-yaml";
   import { settings } from "../stores/settings.js";
   import FormatterIcon from "./FormatterIcon.svelte";
   import jsonLexer from "../lib/json-lexer.js";
@@ -43,7 +43,7 @@
       const edits = jsoncFormat(value, undefined, { tabSize: $settings.indentSize, insertSpaces: true, eol: "\n", keepLines: $settings.keepLines });
       value = applyEdits(value, edits);
     } else if (format === "yaml") {
-      value = YAML.stringify(YAML.parse(value), null, " ".repeat($settings.indentSize));
+      value = YAML.dump(YAML.load(value), { indent: $settings.indentSize });
     } else {
       throw Error("Unsupported format");
     }

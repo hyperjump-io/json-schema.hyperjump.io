@@ -1,5 +1,5 @@
 import contentTypeParser from "content-type";
-import * as YAML from "yaml";
+import * as YAML from "js-yaml";
 
 import { setMetaSchemaOutputFormat } from "@hyperjump/json-schema";
 import { addMediaTypePlugin } from "@hyperjump/browser";
@@ -21,7 +21,7 @@ addMediaTypePlugin("application/schema+yaml", {
     const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
     const contextDialectId = contentType.parameters.schema ?? contentType.parameters.profile;
 
-    const schema = YAML.parse(await response.text()) as SchemaObject;
+    const schema = YAML.load(await response.text()) as SchemaObject;
     return buildSchemaDocument(schema, response.url, contextDialectId);
   },
   // eslint-disable-next-line @typescript-eslint/require-await
