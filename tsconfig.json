@@ -1,8 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
-  "include": ["./eslint.config.js", "./svelte.config.js", "./vite.config.js", "./src/"],
+  "include": ["./eslint.config.js", "./svelte.config.js", "./vite.config.ts", "./src/"],
   "compilerOptions": {
-    "module": "esnext",
     "moduleResolution": "bundler",
 		"sourceMap": true,
     "esModuleInterop": true,

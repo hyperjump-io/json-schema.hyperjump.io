@@ -103,7 +103,7 @@ $id: '${id}'`
         if (await schemaDocuments[0]) {
           const schema = await getSchema(schemaUrl, await browser);
           const compiled = await compile(schema);
-          return (value: Json, outputFormat?: OutputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat);
+          return ((value: Json, outputFormat: OutputFormat) => interpret(compiled, Instance.fromJs(value), outputFormat)) as Validator;
         }
       } catch (_error) {
       }

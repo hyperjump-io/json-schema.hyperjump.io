@@ -1,5 +1,4 @@
 import tseslint from "typescript-eslint";
-// @ts-expect-error No types available
 import importPlugin from "eslint-plugin-import";
 import stylistic from "@stylistic/eslint-plugin";
 import svelte from "eslint-plugin-svelte";
@@ -30,8 +29,8 @@ export default tseslint.config([
   }),
 
   // Import
-  importPlugin.flatConfigs.recommended, // eslint-disable-line @typescript-eslint/no-unsafe-member-access
-  importPlugin.flatConfigs.typescript, // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+  importPlugin.flatConfigs.recommended,
+  importPlugin.flatConfigs.typescript,
   {
     settings: {
       "import/resolver": {
