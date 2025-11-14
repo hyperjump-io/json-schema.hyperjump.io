@@ -17,8 +17,17 @@
     <label class="settings-label" for="indentSize">Indent Size:</label>
     <div class="settings-input"><input type="number" id="indentSize" min="0" max="8" bind:value={$settings.indentSize} style="width: 3em"></div>
 
-    <label class="settings-label" for="keepLines">Keep Lines:</label>
+    <label class="settings-label" for="keepLines">Keep Lines (JSON only):</label>
     <div class="settings-input"><input type="checkbox" id="keepLines" bind:checked={$settings.keepLines}></div>
+
+    <label class="settings-label" for="format">Validate formats:</label>
+    <div class="settings-input">
+      <select bind:value={$settings.format}>
+        <option value={undefined}>Default</option>
+        <option value={false}>Annotation</option>
+        <option value={true}>Assertion</option>
+      </select>
+    </div>
   </div>
   {/if}
 
@@ -57,7 +66,6 @@
     z-index: 10;
 
     border: thin solid var(--text-color);
-    min-width: 12em;
     background-color: var(--background-color);
     border-radius: .5em;
     padding: .5em;
@@ -65,6 +73,7 @@
 
   .settings-label {
     text-align: right;
+    white-space: nowrap;
     padding: .25em .5em .25em .5em;
   }
 

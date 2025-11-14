@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as YAML from "js-yaml";
 
-  import {} from "$lib/json-schema.ts";
+  import { setShouldValidateFormat } from "$lib/json-schema.ts";
   import {
     buildSchemaDocument,
     compile,
@@ -16,6 +16,8 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+
+  import { settings } from "../stores/settings.js";
 
   import type { Browser } from "@hyperjump/browser";
   import type { OutputFormat, OutputUnit, SchemaObject, Validator } from "@hyperjump/json-schema";
@@ -131,6 +133,7 @@ $id: '${id}'`
 
   const validationResults = $derived.by(async () => {
     if (instances[selectedInstance].text !== "") {
+      setShouldValidateFormat($settings.format);
       let v = await validator;
 
       if (v) {

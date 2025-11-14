@@ -4,6 +4,7 @@ import * as YAML from "js-yaml";
 import { setMetaSchemaOutputFormat } from "@hyperjump/json-schema";
 import { addMediaTypePlugin } from "@hyperjump/browser";
 import { buildSchemaDocument, BASIC } from "@hyperjump/json-schema/experimental";
+import "@hyperjump/json-schema/formats";
 import "@hyperjump/json-schema/draft-2020-12";
 import "@hyperjump/json-schema/draft-2019-09";
 import "@hyperjump/json-schema/draft-07";

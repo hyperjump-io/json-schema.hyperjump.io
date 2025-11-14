@@ -6,6 +6,7 @@ import type { Writable } from "svelte/store";
 type Settings = {
   indentSize: number;
   keepLines: boolean;
+  format?: boolean;
 };
 
 export let settings: Writable<Settings>;
