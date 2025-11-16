@@ -22,7 +22,7 @@
 
     <label class="settings-label" for="format">Validate formats:</label>
     <div class="settings-input">
-      <select bind:value={$settings.format}>
+      <select id="format" bind:value={$settings.format}>
         <option value={undefined}>Default</option>
         <option value={false}>Annotation</option>
         <option value={true}>Assertion</option>
