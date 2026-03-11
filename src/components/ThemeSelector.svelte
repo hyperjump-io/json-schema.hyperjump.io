@@ -98,7 +98,6 @@
     --item-height: 1.5em;
 
     --font-size: 1em;
-    color: var(--text-color);
 
     --chevron-width: 100%;
     --chevron-icon-width: 1em;
@@ -111,12 +110,8 @@
     --list-background: var(--background-color);
     --item-hover-bg: var(--line-focus-background-color);
     --selected-item-bg: var(--line-focus-background-color);
-    --item-is-active-bg: var(--line-focus-background-color);
-
-    --item-color: var(--text-color);
-    --item-hover-color: var(--text-color);
-    --item-is-active-color: var(--text-color);
-    --item-active-color: var(--text-color);
+    --item-is-active-bg: var(--text-color);
+    --item-is-active-color:var(--background-color);
 
     --border: thin solid var(--text-color);
     --border-focused: thin solid var(--text-color);
