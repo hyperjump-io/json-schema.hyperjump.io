@@ -1,15 +1,25 @@
 <script lang="ts">
   import GearIcon from "./GearIcon.svelte";
+  import CloseIcon from "./CloseIcon.svelte";
   import { settings } from "../stores/settings.js";
 
   let isOpen = $state(false);
+  let container: HTMLDivElement | undefined = $state();
 
   const toggleOpen = () => {
     isOpen = !isOpen;
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (isOpen && container && !event.composedPath().includes(container)) {
+      isOpen = false;
+    }
+  };
 </script>
 
-<div class="Settings">
+<svelte:window onclick={handleClickOutside} />
+
+<div class="Settings" bind:this={container}>
   {#if isOpen}
   <div class="settings-form">
     <h2>Settings</h2>
@@ -32,7 +42,11 @@
   {/if}
 
   <button type="button" class="settings-button" aria-label="Settings" onclick={toggleOpen}>
-    <GearIcon size="1.5rem" />
+    {#if isOpen}
+      <CloseIcon size="1.5rem" />
+    {:else}
+      <GearIcon size="1.5rem" />
+    {/if}
   </button>
 </div>
 
