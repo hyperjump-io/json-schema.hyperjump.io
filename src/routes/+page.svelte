@@ -156,11 +156,34 @@ $id: '${id}'`
     }
   };
 
+  const convertFormat = (text: string, fromFormat: "json" | "yaml", toFormat: "json" | "yaml") => {
+    if (!text || !text.trim()) return text;
+    try {
+      const parsed = parse(text, fromFormat);
+      if (toFormat === "yaml") {
+        return YAML.dump(parsed, { indent: $settings.indentSize });
+      } else {
+        return JSON.stringify(parsed, null, $settings.indentSize);
+      }
+    } catch (e) {
+      return text;
+    }
+  };
+
   const setFormat = (newFormat: "json" | "yaml") => () => {
+    if (format === newFormat) return;
+
+    schemas = schemas.map((schema) => ({
+      ...schema,
+      text: convertFormat(schema.text ?? "", format, newFormat)
+    }));
+
+    instances = instances.map((instance) => ({
+      ...instance,
+      text: convertFormat(instance.text ?? "", format, newFormat)
+    }));
+
     format = newFormat;
-    schemas = [newSchema("Schema", schemaUrl, true)];
-    instances = [newInstance()];
-    selectedInstance = 0;
   };
 </script>
 
