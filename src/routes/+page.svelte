@@ -156,32 +156,56 @@ $id: '${id}'`
     }
   };
 
-  const convertFormat = (text: string, fromFormat: "json" | "yaml", toFormat: "json" | "yaml") => {
-    if (!text || !text.trim()) return text;
+  const convertFormat = (
+    text: string,
+    fromFormat: "json" | "yaml",
+    toFormat: "json" | "yaml"
+  ): { text: string; error: boolean } => {
+    if (!text || !text.trim()) return { text, error: false };
+
     try {
       const parsed = parse(text, fromFormat);
+
       if (toFormat === "yaml") {
-        return YAML.dump(parsed, { indent: $settings.indentSize });
+        return {
+          text: YAML.dump(parsed, { indent: $settings.indentSize }),
+          error: false
+        };
       } else {
-        return JSON.stringify(parsed, null, $settings.indentSize);
+        return {
+          text: JSON.stringify(parsed, null, $settings.indentSize),
+          error: false
+        };
       }
     } catch (e) {
-      return text;
+      return { text, error: true };
     }
   };
 
   const setFormat = (newFormat: "json" | "yaml") => () => {
     if (format === newFormat) return;
+    let hasError = false;
+        schemas = schemas.map((schema) => {
+          const result = convertFormat(schema.text ?? "", format, newFormat);
+          if (result.error) hasError = true;
 
-    schemas = schemas.map((schema) => ({
-      ...schema,
-      text: convertFormat(schema.text ?? "", format, newFormat)
-    }));
+          return {
+            ...schema,
+            text: result.text
+          };
+        });
 
-    instances = instances.map((instance) => ({
-      ...instance,
-      text: convertFormat(instance.text ?? "", format, newFormat)
-    }));
+    instances = instances.map((instance) => {
+      const result = convertFormat(instance.text ?? "", format, newFormat);
+        if (result.error) hasError = true;
+
+        return {
+          ...instance,
+          text: result.text
+        };
+    });
+
+   if (hasError) return;
 
     format = newFormat;
   };
