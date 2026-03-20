@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import * as YAML from "js-yaml";
 
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
@@ -16,7 +17,10 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+  import ShareIcon from "../components/ShareIcon.svelte";
+  import CheckIcon from "../components/CheckIcon.svelte";
 
+  import { compressToUriFragment, decompressFromUriFragment } from "$lib/compression";
   import { settings } from "../stores/settings.js";
 
   import type { Browser } from "@hyperjump/browser";
@@ -162,6 +166,56 @@ $id: '${id}'`
     instances = [newInstance()];
     selectedInstance = 0;
   };
+
+  // Share a link
+
+  type ShareableState = {
+    schemas: Tab[];
+    instances: Tab[];
+    selectedSchema: number;
+    selectedInstance: number;
+    format: "json" | "yaml";
+  };
+
+  const encodeState = async (): Promise<string> => {
+    const state: ShareableState = {
+      schemas,
+      instances,
+      selectedSchema,
+      selectedInstance,
+      format
+    };
+    return await compressToUriFragment(state);
+  };
+
+  const decodeState = async (hash: string) => {
+    const state = await decompressFromUriFragment<ShareableState>(hash);
+    schemas = state.schemas;
+    instances = state.instances;
+    selectedSchema = state.selectedSchema;
+    selectedInstance = state.selectedInstance;
+    format = state.format;
+  };
+
+  let isCopied = $state(false);
+
+  const share = async () => {
+    const hash = await encodeState();
+    const url = `${window.location.origin}#${hash}`;
+    await navigator.clipboard.writeText(url);
+    isCopied = true;
+    setTimeout(() => {
+      isCopied = false;
+    }, 2000);
+  };
+
+  onMount(async () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      await decodeState(hash);
+      history.replaceState(null, "", window.location.pathname);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -177,6 +231,15 @@ $id: '${id}'`
     <h1>Hyperjump - JSON&nbsp;Schema</h1>
 
     <div class="right-controls">
+      <div class="share">
+      <button aria-label="Share" title="Copy a shareable link" onclick={share}>
+        {#if isCopied}
+          <CheckIcon size="1rem" />
+        {:else}
+          <ShareIcon size="1rem" />
+        {/if}
+      </button>
+      </div>
       <div class="format">
         <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
       </div>
@@ -257,7 +320,7 @@ $id: '${id}'`
   }
 
   /* Adjust the header for small screens */
-  @media (max-width: 750px) {
+  @media (max-width: 800px) {
     .header {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
@@ -268,7 +331,6 @@ $id: '${id}'`
 
   .format {
     display: flex;
-    background-color: var(--background-color);
     align-items: center;
   }
 
@@ -286,6 +348,12 @@ $id: '${id}'`
 
   .format :not(.selected) {
     opacity: 50%;
+  }
+
+  .share {
+    display: flex;
+    align-items: center;
+    margin-right: .5rem;
   }
 
   .editor-section {
