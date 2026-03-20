@@ -211,10 +211,29 @@ $id: '${id}'`
 
   onMount(async () => {
     const hash = window.location.hash.substring(1);
-    if (hash) {
+
+    if (hash.startsWith("schema=")) {
+      const match = /^schema=(?:(?<format>json|yaml),)?(?<url>.*)$/.exec(hash)?.groups;
+      if (match) {
+        try {
+          const response = await fetch(match.url);
+          if (response.ok) {
+            const schemaContent = await response.text();
+
+            schemas[0].text = schemaContent;
+            schemas[0].label = schemaUrl.split("/").pop() ?? "Schema";
+            format = match.format as "json" | "yaml" ?? "json";
+            triggerSchemaValidation++;
+          }
+        } catch (_error) {
+          // TODO: Provide feedback to the user
+        }
+      }
+    } else if (hash) {
       await decodeState(hash);
-      history.replaceState(null, "", window.location.pathname);
     }
+
+    history.replaceState(null, "", window.location.pathname);
   });
 </script>
 
