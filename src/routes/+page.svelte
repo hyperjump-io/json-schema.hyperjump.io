@@ -14,6 +14,7 @@
   import * as Instance from "@hyperjump/json-schema/instance/experimental";
 
   import ThemeSelector from "../components/ThemeSelector.svelte";
+  import FormatToggle from "../components/FormatToggle.svelte";
   import Settings from "../components/Settings.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
@@ -165,8 +166,7 @@ $id: '${id}'`
     }
   };
 
-  const setFormat = (newFormat: "json" | "yaml") => () => {
-    format = newFormat;
+  const setFormat = () => {
     schemas = [newSchema("Schema", schemaUrl, true)];
     instances = [newInstance()];
     selectedInstance = 0;
@@ -246,9 +246,7 @@ $id: '${id}'`
 
     <div class="right-controls">
       <ShareButton onClick={() => getSharableUrl()} />
-      <div class="format">
-        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
-      </div>
+      <FormatToggle bind:format onclick={setFormat} />
       <Settings />
     </div>
   </div>
@@ -336,27 +334,6 @@ $id: '${id}'`
         "title title"
         "left right";
     }
-  }
-
-  .format {
-    display: flex;
-    align-items: center;
-  }
-
-  .format :first-child {
-    border-radius: .25em 0 0 .25em;
-  }
-
-  .format :last-child {
-    border-radius: 0 .25em .25em 0;
-  }
-
-  .format button:hover {
-    opacity: 100%;
-  }
-
-  .format :not(.selected) {
-    opacity: 50%;
   }
 
   .editor-section {
