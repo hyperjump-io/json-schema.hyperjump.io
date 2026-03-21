@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
+  import { replaceState } from "$app/navigation"; // eslint-disable-line import/no-unresolved
   import * as YAML from "js-yaml";
 
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
@@ -242,7 +243,9 @@ $id: '${id}'`
       await decodeState(hash);
     }
 
-    history.replaceState(null, "", window.location.pathname);
+    await tick();
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
+    replaceState(window.location.pathname, {});
   });
 </script>
 
