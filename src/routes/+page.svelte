@@ -68,9 +68,14 @@ $id: '${id}'`
   let compileResults: Promise<OutputUnit> | undefined = $state();
   let validator: Promise<Validator | undefined> | undefined = $state();
   let triggerSchemaValidation = $state(0);
+  let isLoadingSchemaFromUrl = $state(false);
 
   // $derived doesn't handle async code well. This was the only thing that worked.
   $effect(() => {
+    if (isLoadingSchemaFromUrl) {
+      return;
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     triggerSchemaValidation;
 
@@ -213,20 +218,24 @@ $id: '${id}'`
     const hash = window.location.hash.substring(1);
 
     if (hash.startsWith("schema=")) {
+      isLoadingSchemaFromUrl = true;
       const match = /^schema=(?:(?<format>json|yaml),)?(?<url>.*)$/.exec(hash)?.groups;
       if (match) {
+        schemas[0].text = `... Loading Schema from ${match.url}`;
+
         try {
           const response = await fetch(match.url);
           if (response.ok) {
+            isLoadingSchemaFromUrl = false;
             const schemaContent = await response.text();
 
             schemas[0].text = schemaContent;
-            schemas[0].label = schemaUrl.split("/").pop() ?? "Schema";
-            format = match.format as "json" | "yaml" ?? "json";
-            triggerSchemaValidation++;
+            format = (match.format as "json" | "yaml") ?? "json";
+          } else {
+            schemas[0].text = `Failed to load schema ${response.status} ${response.statusText}`;
           }
         } catch (_error) {
-          // TODO: Provide feedback to the user
+          schemas[0].text = `Failed to load schema from ${match.url}`;
         }
       }
     } else if (hash) {
@@ -275,6 +284,7 @@ $id: '${id}'`
       newTab={newSchema}
       format={format}
       onclose={onSchemaTabClose}
+      disabled={isLoadingSchemaFromUrl}
     />
   </div>
   <div class="editor-section">

@@ -12,6 +12,7 @@
     selected?: number;
     minTabs?: number;
     onclose?: (index: number) => void;
+    disabled?: boolean;
   };
 
   let {
@@ -22,7 +23,8 @@
     active = 0,
     selected = $bindable(0),
     minTabs = 1,
-    onclose
+    onclose,
+    disabled = false
   }: Props = $props();
 
   const DEBOUNCE_DELAY = 750;
@@ -88,7 +90,7 @@
   {/if}
 </div>
 <div role="tabpanel" id={`${ns}-tabpanel`} aria-labelledby={`${ns}-tab-${selected}`}>
-  <Editor bind:this={editor} value={tabs[selected].text} format={format} oninput={debounce((value: string) => tabs[selected].text = value, DEBOUNCE_DELAY)} />
+  <Editor bind:this={editor} value={tabs[selected].text} format={format} disabled={disabled} oninput={debounce((value: string) => tabs[selected].text = value, DEBOUNCE_DELAY)} />
 </div>
 
 <style>
