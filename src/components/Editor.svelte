@@ -10,12 +10,14 @@
     value?: string;
     format?: "json" | "yaml";
     oninput?: (value: string) => void;
+    disabled?: boolean;
   };
 
   let {
     value = $bindable(""),
     format = "json",
-    oninput = () => {}
+    oninput = () => {},
+    disabled = false
   }: Props = $props();
 
   let src: HTMLTextAreaElement | undefined = $state();
@@ -83,7 +85,7 @@
        -->{/if}<!--
      -->{/each}<!--
    --></pre>
-      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} oninput={(event) => { oninput(event.currentTarget.value); }}></textarea>
+      <textarea class="src" aria-label="Code Editor" bind:this={src} bind:value={value} disabled={disabled} oninput={(event) => { oninput(event.currentTarget.value); }}></textarea>
     </div>
   </div>
   <button class="formatter" type="button" title="Format Code" onclick={() => formatCode()}><FormatterIcon /></button>
