@@ -66,7 +66,6 @@
   .settings-button {
     border: none;
     background-color: transparent;
-    padding: .5em;
     position: relative;
     z-index: 11;
   }

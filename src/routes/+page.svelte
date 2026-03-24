@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount, tick } from "svelte";
+  import { replaceState } from "$app/navigation"; // eslint-disable-line import/no-unresolved
   import * as YAML from "js-yaml";
 
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
@@ -12,11 +14,14 @@
   import * as Instance from "@hyperjump/json-schema/instance/experimental";
 
   import ThemeSelector from "../components/ThemeSelector.svelte";
+  import FormatToggle from "../components/FormatToggle.svelte";
   import Settings from "../components/Settings.svelte";
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+  import ShareButton from "../components/ShareButton.svelte";
 
+  import { compressToUriFragment, decompressFromUriFragment } from "$lib/compression";
   import { settings } from "../stores/settings.js";
 
   import type { Browser } from "@hyperjump/browser";
@@ -64,9 +69,14 @@ $id: '${id}'`
   let compileResults: Promise<OutputUnit> | undefined = $state();
   let validator: Promise<Validator | undefined> | undefined = $state();
   let triggerSchemaValidation = $state(0);
+  let isLoadingSchemaFromUrl = $state(false);
 
   // $derived doesn't handle async code well. This was the only thing that worked.
   $effect(() => {
+    if (isLoadingSchemaFromUrl) {
+      return;
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     triggerSchemaValidation;
 
@@ -156,11 +166,69 @@ $id: '${id}'`
     }
   };
 
-  const setFormat = (newFormat: "json" | "yaml") => () => {
-    format = newFormat;
+  const setFormat = () => {
     schemas = [newSchema("Schema", schemaUrl, true)];
     instances = [newInstance()];
     selectedInstance = 0;
+  };
+
+  // Share a link
+
+  type ShareableState = {
+    schemas: Tab[];
+    instances: Tab[];
+    selectedSchema: number;
+    selectedInstance: number;
+    format: "json" | "yaml";
+  };
+
+  onMount(async () => {
+    const hash = window.location.hash.substring(1);
+
+    try {
+      if (hash.startsWith("schema=")) {
+        isLoadingSchemaFromUrl = true;
+        const match = /^schema=(?:(?<format>json|yaml),)?(?<url>.*)$/.exec(hash)?.groups;
+        if (match) {
+          schemas[0].text = `... Loading Schema from ${match.url}`;
+
+          const response = await fetch(match.url);
+          if (response.ok) {
+            isLoadingSchemaFromUrl = false;
+            const schemaContent = await response.text();
+
+            schemas[0].text = schemaContent;
+            format = (match.format as "json" | "yaml") ?? "json";
+          } else {
+            throw Error(`Failed to load schema ${response.status} ${response.statusText}`, { cause: response });
+          }
+        } else {
+          throw Error("Failed to parse URL fragment");
+        }
+      } else if (hash) {
+        const state = await decompressFromUriFragment<ShareableState>(hash);
+        schemas = state.schemas;
+        instances = state.instances;
+        selectedSchema = state.selectedSchema;
+        selectedInstance = state.selectedInstance;
+        format = state.format;
+      }
+    } finally {
+      await tick();
+      // eslint-disable-next-line svelte/no-navigation-without-resolve
+      replaceState(window.location.pathname, {});
+    }
+  });
+
+  const getSharableUrl = async (): Promise<string> => {
+    const state: ShareableState = {
+      schemas,
+      instances,
+      selectedSchema,
+      selectedInstance,
+      format
+    };
+    return `${window.location.origin}#${await compressToUriFragment(state)}`;
   };
 </script>
 
@@ -177,9 +245,8 @@ $id: '${id}'`
     <h1>Hyperjump - JSON&nbsp;Schema</h1>
 
     <div class="right-controls">
-      <div class="format">
-        <button class={format === "json" ? "selected" : ""} onclick={setFormat("json")}>JSON</button><button class={format === "yaml" ? "selected" : ""} onclick={setFormat("yaml")}>YAML</button>
-      </div>
+      <ShareButton onClick={() => getSharableUrl()} />
+      <FormatToggle bind:format onclick={setFormat} />
       <Settings />
     </div>
   </div>
@@ -193,6 +260,7 @@ $id: '${id}'`
       newTab={newSchema}
       format={format}
       onclose={onSchemaTabClose}
+      disabled={isLoadingSchemaFromUrl}
     />
   </div>
   <div class="editor-section">
@@ -254,38 +322,18 @@ $id: '${id}'`
     grid-area: right;
     display: flex;
     justify-self: end;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   /* Adjust the header for small screens */
-  @media (max-width: 750px) {
+  @media (max-width: 800px) {
     .header {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
         "title title"
         "left right";
     }
-  }
-
-  .format {
-    display: flex;
-    background-color: var(--background-color);
-    align-items: center;
-  }
-
-  .format :first-child {
-    border-radius: .25em 0 0 .25em;
-  }
-
-  .format :last-child {
-    border-radius: 0 .25em .25em 0;
-  }
-
-  .format button:hover {
-    opacity: 100%;
-  }
-
-  .format :not(.selected) {
-    opacity: 50%;
   }
 
   .editor-section {
