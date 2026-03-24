@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as YAML from "js-yaml";
-
+  import { browser } from '$app/environment';
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
   import {
     buildSchemaDocument,
@@ -28,7 +28,14 @@
   const defaultSchemaVersion = "https://json-schema.org/draft/2020-12/schema";
   const schemaUrl = "https://json-schema.hyperjump.io/schema";
 
-  let format: "json" | "yaml" = $state("json");
+   const getSaved = <T>(key: string, fallback: T): T => {
+  if (!browser) return fallback;
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : fallback;
+};
+
+
+  let format: "json" | "yaml" = $state(getSaved("h-format", "json"));
 
   const newSchema = (function () {
     let sequence = 1;
@@ -58,8 +65,9 @@ $id: '${id}'`
     return () => ({ label: `Instance ${sequence++}`, text: "" });
   }());
 
-  let schemas: Tab[] = $state([newSchema("Schema", schemaUrl, true)]);
-  let selectedSchema = $state(0);
+ 
+  let schemas: Tab[] = $state(getSaved(`h-schemas-${format}`, [newSchema("Schema", schemaUrl, true)]));
+  let selectedSchema = $state(getSaved(`h-selected-schema-${format}`, 0));
   let schemaDocuments: Promise<SchemaDocument>[] = [];
   let compileResults: Promise<OutputUnit> | undefined = $state();
   let validator: Promise<Validator | undefined> | undefined = $state();
@@ -128,8 +136,18 @@ $id: '${id}'`
     }
   };
 
-  let instances: Tab[] = $state([newInstance()]);
-  let selectedInstance = $state(0);
+   let instances: Tab[] = $state(getSaved(`h-instances-${format}`, [newInstance()]));
+   let selectedInstance = $state(getSaved(`h-selected-instance-${format}`, 0));
+
+   $effect(() => {
+    if (browser) {
+      localStorage.setItem(`h-schemas-${format}`, JSON.stringify(schemas));
+      localStorage.setItem(`h-instances-${format}`, JSON.stringify(instances));
+      localStorage.setItem(`h-selected-schema-${format}`, JSON.stringify(selectedSchema));
+      localStorage.setItem(`h-selected-instance-${format}`, JSON.stringify(selectedInstance));
+      localStorage.setItem(`h-format`, JSON.stringify(format));
+    }
+  });
 
   const validationResults = $derived.by(async () => {
     if (instances[selectedInstance].text !== "") {
@@ -157,10 +175,12 @@ $id: '${id}'`
   };
 
   const setFormat = (newFormat: "json" | "yaml") => () => {
+    if (format === newFormat) return;
     format = newFormat;
-    schemas = [newSchema("Schema", schemaUrl, true)];
-    instances = [newInstance()];
-    selectedInstance = 0;
+    schemas = getSaved(`h-schemas-${newFormat}`, [newSchema("Schema", schemaUrl, true)]);
+    selectedSchema = getSaved(`h-selected-schema-${newFormat}`, 0);
+    instances = getSaved(`h-instances-${newFormat}`, [newInstance()]);
+    selectedInstance = getSaved(`h-selected-instance-${newFormat}`, 0);
   };
 </script>
 
