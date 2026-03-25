@@ -30,6 +30,46 @@
 
   let format: "json" | "yaml" = $state("json");
 
+  const generateTabLabel = (uri: string, baseUri: string) => {
+    if (uri === baseUri) return { label: "Schema", title: uri };
+
+    let label = uri;
+    try {
+      const uriObj = new URL(uri);
+      const baseObj = new URL(baseUri);
+
+      if (uriObj.origin === baseObj.origin) {
+        const uriParts = uriObj.pathname.split('/');
+        const baseParts = baseObj.pathname.split('/');
+        baseParts.pop();
+
+        let i = 0;
+        while (i < uriParts.length && i < baseParts.length && uriParts[i] === baseParts[i]) {
+          i++;
+        }
+
+        let rel = "";
+        for (let j = i; j < baseParts.length; j++) {
+          rel += "../";
+        }
+        rel += uriParts.slice(i).join('/');
+        if (uriObj.hash) rel += uriObj.hash;
+        label = rel;
+      }
+    } catch (_e) {
+      // Ignore invalid URIs
+    }
+
+    label = label.replace(/\.(json|yaml|yml)$/i, "");
+    const parts = label.split('/');
+    if (parts.length > 2) {
+      label = "…/" + parts.slice(-2).join('/');
+    }
+    if (label.length > 30) {
+      label = label.slice(0, 15) + "…" + label.slice(-10);
+    }
+    return { label: label || "Schema", title: uri };
+  };
   const newSchema = (function () {
     let sequence = 1;
 
@@ -83,9 +123,17 @@ $id: '${id}'`
         schemaRegistry[schemaUrl] = await schemaDocuments[0];
       } catch (_error) {
       }
-      for (const schemaDocument of schemaDocuments) {
+      for (let i = 0; i < schemaDocuments.length; i++) {
         try {
-          schemaRegistry[(await schemaDocument).baseUri] = await schemaDocument;
+          const doc = await schemaDocuments[i];
+          schemaRegistry[doc.baseUri] = doc;
+          
+          const mainUri = (await schemaDocuments[0].catch(() => undefined))?.baseUri ?? schemaUrl;
+          const { label, title } = generateTabLabel(doc.baseUri, mainUri);
+          if (schemas[i].label !== label || schemas[i].title !== title) {
+            schemas[i].label = label;
+            schemas[i].title = title;
+          }
         } catch (_error) {
         }
       }
@@ -112,18 +160,18 @@ $id: '${id}'`
     }());
   });
 
-  const onSchemaTabClose = (index: number) => {
+  const onSchemaTabClose = (closedIndex: number) => {
     schemaDocuments = [];
     schemas.forEach((tab, index) => {
       // eslint-disable-next-line @typescript-eslint/require-await
       schemaDocuments[index] = (async function () {
-        const externalId = selectedSchema === 0 ? schemaUrl : "";
+        const externalId = index === 0 ? schemaUrl : "";
         const schema = parse(tab.text ?? "true", format);
         return buildSchemaDocument(schema as SchemaObject, externalId, defaultSchemaVersion);
       }());
     });
 
-    if (selectedSchema !== index) {
+    if (selectedSchema !== closedIndex) {
       triggerSchemaValidation++;
     }
   };

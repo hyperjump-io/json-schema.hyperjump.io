@@ -73,6 +73,7 @@
          aria-selected={ndx === selected}
          aria-controls={`${ns}-tabpanel`}
          class:active={ndx === active}
+         title={tab.title}
          onclick={() => selectTab(ndx)}>
       <span class="tab-label">{tab.label}</span>
     </button>
