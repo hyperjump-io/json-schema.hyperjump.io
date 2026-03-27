@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as YAML from "js-yaml";
+  import { toRelativeUri } from "@hyperjump/uri";
 
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
   import {
@@ -33,41 +34,14 @@
   const generateTabLabel = (uri: string, baseUri: string) => {
     if (uri === baseUri) return { label: "Schema", title: uri };
 
-    let label = uri;
-    try {
-      const uriObj = new URL(uri);
-      const baseObj = new URL(baseUri);
+    let label = toRelativeUri(baseUri, uri);
 
-      if (uriObj.origin === baseObj.origin) {
-        const uriParts = uriObj.pathname.split('/');
-        const baseParts = baseObj.pathname.split('/');
-        baseParts.pop();
+    label = label.replace(/(\.schema)?(\.(json|yaml|yml))?$/i, "");
 
-        let i = 0;
-        while (i < uriParts.length && i < baseParts.length && uriParts[i] === baseParts[i]) {
-          i++;
-        }
-
-        let rel = "";
-        for (let j = i; j < baseParts.length; j++) {
-          rel += "../";
-        }
-        rel += uriParts.slice(i).join('/');
-        if (uriObj.hash) rel += uriObj.hash;
-        label = rel;
-      }
-    } catch (_e) {
-      // Ignore invalid URIs
+    if (label.length > 20) {
+      label = "\u2026" + label.slice(-20);
     }
 
-    label = label.replace(/\.(json|yaml|yml)$/i, "");
-    const parts = label.split('/');
-    if (parts.length > 2) {
-      label = "…/" + parts.slice(-2).join('/');
-    }
-    if (label.length > 30) {
-      label = label.slice(0, 15) + "…" + label.slice(-10);
-    }
     return { label: label || "Schema", title: uri };
   };
   const newSchema = (function () {
@@ -165,7 +139,7 @@ $id: '${id}'`
     schemas.forEach((tab, index) => {
       // eslint-disable-next-line @typescript-eslint/require-await
       schemaDocuments[index] = (async function () {
-        const externalId = index === 0 ? schemaUrl : "";
+        const externalId = selectedSchema === 0 ? schemaUrl : "";
         const schema = parse(tab.text ?? "true", format);
         return buildSchemaDocument(schema as SchemaObject, externalId, defaultSchemaVersion);
       }());
