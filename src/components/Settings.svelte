@@ -21,7 +21,7 @@
 
 <div class="Settings" bind:this={container}>
   {#if isOpen}
-  <div class="settings-form">
+  <div class="settings-panel">
     <h2>Settings</h2>
 
     <label class="settings-label" for="indentSize">Indent Size:</label>
@@ -64,13 +64,15 @@
   }
 
   .settings-button {
+    display: flex;
+    padding: 0.25rem;
     border: none;
     background-color: transparent;
     position: relative;
     z-index: 11;
   }
 
-  .settings-form {
+  .settings-panel {
     position: absolute;
     right: 0;
 
