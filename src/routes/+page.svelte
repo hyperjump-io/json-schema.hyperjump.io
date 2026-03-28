@@ -66,17 +66,13 @@ $id: '${id}'`
   let schemas: Tab[] = $state([newSchema("Schema", schemaUrl, true)]);
   let selectedSchema = $state(0);
   let schemaDocuments: Promise<SchemaDocument>[] = [];
-  let compileResults: Promise<OutputUnit> | undefined = $state();
+  let compileResults: Promise<OutputUnit | undefined> | undefined = $state();
   let validator: Promise<Validator | undefined> | undefined = $state();
   let triggerSchemaValidation = $state(0);
-  let isLoadingSchemaFromUrl = $state(false);
+  let isLoadingState = $state(false);
 
   // $derived doesn't handle async code well. This was the only thing that worked.
   $effect(() => {
-    if (isLoadingSchemaFromUrl) {
-      return;
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     triggerSchemaValidation;
 
@@ -105,6 +101,10 @@ $id: '${id}'`
     }());
 
     compileResults = (async function () {
+      if (isLoadingState) {
+        return;
+      }
+
       const schema = await getSchema((await schemaDocuments[selectedSchema]).baseUri, await browser);
       await compile(schema);
       return { valid: true } as OutputUnit;
@@ -187,36 +187,46 @@ $id: '${id}'`
 
     try {
       if (hash.startsWith("schema=")) {
-        isLoadingSchemaFromUrl = true;
         const match = /^schema=(?:(?<format>json|yaml),)?(?<url>.*)$/.exec(hash)?.groups;
         if (match) {
+          isLoadingState = true;
           schemas[0].text = `... Loading Schema from ${match.url}`;
 
           const response = await fetch(match.url);
           if (response.ok) {
-            isLoadingSchemaFromUrl = false;
+            isLoadingState = false;
             const schemaContent = await response.text();
 
             schemas[0].text = schemaContent;
             format = (match.format as "json" | "yaml") ?? "json";
           } else {
-            throw Error(`Failed to load schema ${response.status} ${response.statusText}`, { cause: response });
+            throw Error(`Failed to load schema ${match.url}\n\nReason: ${response.status} ${response.statusText}`, { cause: response });
           }
         } else {
-          throw Error("Failed to parse URL fragment");
+          throw Error("Malformed URL fragment");
         }
       } else if (hash) {
-        const state = await decompressFromUriFragment<ShareableState>(hash);
-        schemas = state.schemas;
-        instances = state.instances;
-        selectedSchema = state.selectedSchema;
-        selectedInstance = state.selectedInstance;
-        format = state.format;
+        try {
+          isLoadingState = true;
+          schemas[0].text = `... Loading state from URL`;
+          const state = await decompressFromUriFragment<ShareableState>(hash);
+          schemas = state.schemas;
+          instances = state.instances;
+          selectedSchema = state.selectedSchema;
+          selectedInstance = state.selectedInstance;
+          format = state.format;
+          isLoadingState = false;
+        } catch (error) {
+          throw Error("Malformed URL fragment", { cause: error });
+        }
       }
-    } finally {
+
       await tick();
       // eslint-disable-next-line svelte/no-navigation-without-resolve
       replaceState(window.location.pathname, {});
+    } catch (error: unknown) {
+      schemas[0].text = "Error: " + (error instanceof Error ? error.message : "Something went wrong");
+      throw error;
     }
   });
 
@@ -264,7 +274,7 @@ $id: '${id}'`
       newTab={newSchema}
       format={format}
       onclose={onSchemaTabClose}
-      disabled={isLoadingSchemaFromUrl}
+      disabled={isLoadingState}
     />
   </div>
   <div class="editor-section">
