@@ -19,7 +19,7 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
-  import ShareButton from "../components/ShareButton.svelte";
+  import Share from "../components/Share.svelte";
 
   import { compressToUriFragment, decompressFromUriFragment } from "$lib/compression";
   import { settings } from "../stores/settings.js";
@@ -220,7 +220,8 @@ $id: '${id}'`
     }
   });
 
-  const getSharableUrl = async (): Promise<string> => {
+  let sharableUrl = $state("");
+  $effect(() => {
     const state: ShareableState = {
       schemas,
       instances,
@@ -228,8 +229,11 @@ $id: '${id}'`
       selectedInstance,
       format
     };
-    return `${window.location.origin}#${await compressToUriFragment(state)}`;
-  };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    compressToUriFragment(state).then((url) => {
+      sharableUrl = `${window.location.origin}#${url}`;
+    });
+  });
 </script>
 
 <svelte:head>
@@ -245,7 +249,7 @@ $id: '${id}'`
     <h1>Hyperjump - JSON&nbsp;Schema</h1>
 
     <div class="right-controls">
-      <ShareButton onClick={() => getSharableUrl()} />
+      <Share url={sharableUrl} />
       <FormatToggle bind:format onclick={setFormat} />
       <Settings />
     </div>
@@ -323,7 +327,7 @@ $id: '${id}'`
     display: flex;
     justify-self: end;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   /* Adjust the header for small screens */
