@@ -16,6 +16,9 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+  import NotificationToast from "../components/NotificationToast.svelte";
+
+  import { pushNotification } from "../stores/notifications.svelte.js";
 
   import { settings } from "../stores/settings.js";
 
@@ -156,11 +159,64 @@ $id: '${id}'`
     }
   };
 
+  const convertFormat = (
+    text: string,
+    fromFormat: "json" | "yaml",
+    toFormat: "json" | "yaml"
+  ): { text: string; error: boolean } => {
+    if (!text || !text.trim()) return { text, error: false };
+
+    try {
+      const parsed = parse(text, fromFormat);
+
+      if (toFormat === "yaml") {
+        return {
+          text: YAML.dump(parsed, { indent: $settings.indentSize }),
+          error: false
+        };
+      } else {
+        return {
+          text: JSON.stringify(parsed, null, $settings.indentSize),
+          error: false
+        };
+      }
+    } catch (e) {
+      return { text, error: true };
+    }
+  };
+
   const setFormat = (newFormat: "json" | "yaml") => () => {
+    if (format === newFormat) return;
+    let hasError = false;
+        schemas = schemas.map((schema) => {
+          const result = convertFormat(schema.text ?? "", format, newFormat);
+          if (result.error) hasError = true;
+
+          return {
+            ...schema,
+            text: result.text
+          };
+        });
+
+    instances = instances.map((instance) => {
+      const result = convertFormat(instance.text ?? "", format, newFormat);
+        if (result.error) hasError = true;
+
+        return {
+          ...instance,
+          text: result.text
+        };
+    });
+
+    if (hasError) {
+      pushNotification(
+        "Format switch aborted: some tabs contain syntax errors that prevent conversion.",
+        "warning"
+      );
+      return;
+    }
+
     format = newFormat;
-    schemas = [newSchema("Schema", schemaUrl, true)];
-    instances = [newInstance()];
-    selectedInstance = 0;
   };
 </script>
 
@@ -216,6 +272,7 @@ $id: '${id}'`
   </div>
 
   <Footer />
+  <NotificationToast />
 </main>
 
 <style>
