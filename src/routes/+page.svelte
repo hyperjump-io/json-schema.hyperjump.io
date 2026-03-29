@@ -16,6 +16,9 @@
   import EditorTabs from "../components/EditorTabs.svelte";
   import Results from "../components/Results.svelte";
   import Footer from "../components/Footer.svelte";
+  import NotificationToast from "../components/NotificationToast.svelte";
+
+  import { pushNotification } from "../stores/notifications.svelte.js";
 
   import { settings } from "../stores/settings.js";
 
@@ -205,7 +208,13 @@ $id: '${id}'`
         };
     });
 
-   if (hasError) return;
+    if (hasError) {
+      pushNotification(
+        "Format switch aborted: some tabs contain syntax errors that prevent conversion.",
+        "warning"
+      );
+      return;
+    }
 
     format = newFormat;
   };
@@ -263,6 +272,7 @@ $id: '${id}'`
   </div>
 
   <Footer />
+  <NotificationToast />
 </main>
 
 <style>

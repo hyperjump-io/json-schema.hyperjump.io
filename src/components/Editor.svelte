@@ -2,6 +2,7 @@
   import { format as jsoncFormat, applyEdits } from "jsonc-parser";
   import * as YAML from "js-yaml";
   import { settings } from "../stores/settings.js";
+  import { pushNotification } from "../stores/notifications.svelte.js";
   import FormatterIcon from "./FormatterIcon.svelte";
   import jsonLexer from "../lib/json-lexer.js";
   import yamlLexer from "../lib/yaml-lexer.js";
@@ -39,13 +40,21 @@
   });
 
   const formatCode = () => {
-    if (format === "json") {
-      const edits = jsoncFormat(value, undefined, { tabSize: $settings.indentSize, insertSpaces: true, eol: "\n", keepLines: $settings.keepLines });
-      value = applyEdits(value, edits);
-    } else if (format === "yaml") {
-      value = YAML.dump(YAML.load(value), { indent: $settings.indentSize });
-    } else {
-      throw Error("Unsupported format");
+    try {
+      if (format === "json") {
+        const edits = jsoncFormat(value, undefined, { tabSize: $settings.indentSize, insertSpaces: true, eol: "\n", keepLines: $settings.keepLines });
+        value = applyEdits(value, edits);
+      } else if (format === "yaml") {
+        value = YAML.dump(YAML.load(value), { indent: $settings.indentSize });
+      } else {
+        throw Error("Unsupported format");
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      pushNotification(
+        `Failed to format code: ${message}`,
+        "error"
+      );
     }
   };
 </script>
