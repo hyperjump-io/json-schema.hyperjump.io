@@ -23,6 +23,9 @@
 <button class="copy-button" aria-label="Copy" title={title} onclick={copy}>
   {#if isCopied}
     <CheckIcon size="1rem" />
+    <div class="flash">
+      <div class="message">Copied!</div>
+    </div>
   {:else}
     <CopyIcon size="1rem" />
   {/if}
@@ -32,5 +35,19 @@
   .copy-button {
     display: flex;
     padding: 0.25rem;
+  }
+
+  .flash {
+    position: relative;
+  }
+
+  .message {
+    position: absolute;
+    left: 0.5rem;
+    top: -1rem;
+    border-radius: 0.5rem;
+    padding: 0 0.25rem;
+    background-color: var(--text-color);
+    color: var(--background-color);
   }
 </style>
