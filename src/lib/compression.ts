@@ -1,7 +1,7 @@
 export async function compressToUriFragment(data: unknown): Promise<string> {
   const json = JSON.stringify(data);
   const stream = new Blob([json]).stream();
-  const compressedStream = stream.pipeThrough(new CompressionStream("brotli" as CompressionFormat));
+  const compressedStream = stream.pipeThrough(new CompressionStream("deflate-raw"));
 
   const buffer = await new Response(compressedStream).arrayBuffer();
 
@@ -28,7 +28,7 @@ export async function decompressFromUriFragment<T>(fragment: string): Promise<T>
   }
 
   const stream = new Blob([bytes]).stream();
-  const decompressedStream = stream.pipeThrough(new DecompressionStream("brotli" as CompressionFormat));
+  const decompressedStream = stream.pipeThrough(new DecompressionStream("deflate-raw"));
 
   return await new Response(decompressedStream).json() as T;
 }
