@@ -150,6 +150,7 @@
     grid-row-start: 1;
     grid-column-start: 1;
     background-color: transparent;
+    color: transparent;
     -webkit-text-fill-color: transparent;
     overflow: hidden;
   }
