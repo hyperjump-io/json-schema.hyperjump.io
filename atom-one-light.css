@@ -6,5 +6,6 @@
   --accent1-color: #986801; /* property */
   --accent3-color: #383a42; /* grouping */
   --accent6-color: #a626a4; /* null */
-  --accent7-color: #50a14f;; /* number, string */
+  --accent7-color: #50a14f; /* number, string */
+  --success-color: #50a14f; /* green */
 }
