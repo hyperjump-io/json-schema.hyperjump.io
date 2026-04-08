@@ -2,6 +2,7 @@
   import { onMount, tick } from "svelte";
   import { replaceState } from "$app/navigation"; // eslint-disable-line import/no-unresolved
   import * as YAML from "js-yaml";
+  import { toRelativeUri } from "@hyperjump/uri";
 
   import { setShouldValidateFormat } from "$lib/json-schema.ts";
   import {
@@ -35,6 +36,19 @@
 
   let format: "json" | "yaml" = $state("json");
 
+  const generateTabLabel = (uri: string, baseUri: string) => {
+    if (uri === baseUri) return { label: "Schema", title: uri };
+
+    let label = toRelativeUri(baseUri, uri);
+
+    label = label.replace(/(\.schema)?(\.(json|yaml|yml))?$/i, "");
+
+    if (label.length > 20) {
+      label = "\u2026" + label.slice(-20);
+    }
+
+    return { label: label || "Schema", title: uri };
+  };
   const newSchema = (function () {
     let sequence = 1;
 
@@ -89,9 +103,17 @@ $id: '${id}'`
         schemaRegistry[schemaUrl] = await schemaDocuments[0];
       } catch (_error) {
       }
-      for (const schemaDocument of schemaDocuments) {
+      for (let i = 0; i < schemaDocuments.length; i++) {
         try {
-          schemaRegistry[(await schemaDocument).baseUri] = await schemaDocument;
+          const doc = await schemaDocuments[i];
+          schemaRegistry[doc.baseUri] = doc;
+          
+          const mainUri = (await schemaDocuments[0].catch(() => undefined))?.baseUri ?? schemaUrl;
+          const { label, title } = generateTabLabel(doc.baseUri, mainUri);
+          if (schemas[i].label !== label || schemas[i].title !== title) {
+            schemas[i].label = label;
+            schemas[i].title = title;
+          }
         } catch (_error) {
         }
       }
@@ -122,7 +144,7 @@ $id: '${id}'`
     }());
   });
 
-  const onSchemaTabClose = (index: number) => {
+  const onSchemaTabClose = (closedIndex: number) => {
     schemaDocuments = [];
     schemas.forEach((tab, index) => {
       // eslint-disable-next-line @typescript-eslint/require-await
@@ -133,7 +155,7 @@ $id: '${id}'`
       }());
     });
 
-    if (selectedSchema !== index) {
+    if (selectedSchema !== closedIndex) {
       triggerSchemaValidation++;
     }
   };
