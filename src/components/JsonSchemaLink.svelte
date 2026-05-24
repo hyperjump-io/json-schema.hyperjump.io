@@ -12,7 +12,7 @@
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-<a href={href}>
+<a href={href} target="_blank" rel="noopener noreferrer">
   <svg version="1.1" viewBox="0 0 70.423268 70.42326" height="1.25em">
     <g transform="translate(-104.22785,-45.507923)" id="layer1">
       <!-- eslint-disable-next-line max-len -->
